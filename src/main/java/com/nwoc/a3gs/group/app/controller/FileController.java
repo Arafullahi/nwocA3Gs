@@ -15,9 +15,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +29,7 @@ import com.nwoc.a3gs.group.app.dto.UploadFileResponse;
 import com.nwoc.a3gs.group.app.services.FileStorageService;
 
 
-@RestController
+@Controller
 public class FileController {
 
 	private static final Logger logger = LoggerFactory.getLogger(FileController.class);
@@ -72,4 +74,9 @@ public class FileController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
 				.body(resource);
 	}
+	
+	@RequestMapping({ "/home", "/auth/login" })
+	   public String index() {
+	       return "forward:/";
+	   }
 }
