@@ -67,7 +67,7 @@ public class ServiceRatesServiceImpl {
 		serviceRatesRepository.delete(serviceRates);
 	}
 
-	public Page<ServiceRates> findUserByPages(int pageNumber, int size) {
+	public Page<ServiceRates> findServiceRatesByPages(int pageNumber, int size) {
 		Pageable pageable = new PageRequest(pageNumber, size);
 
 		return serviceRatesRepository.findAll(pageable);

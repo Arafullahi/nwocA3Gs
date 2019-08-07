@@ -87,11 +87,11 @@ public class ServiceRatesController {
 	}
 	
 	@GetMapping("/service/rates/userslist")
-	public ResponseEntity<Page<ServiceRates>> listUserByPages(@RequestParam(defaultValue = "0") int page,
+	public ResponseEntity<Page<ServiceRates>> listServiceRatesByPages(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		try {
 
-			Page<ServiceRates> ratePages = serviceRatesImpl.findUserByPages(page, size);
+			Page<ServiceRates> ratePages = serviceRatesImpl.findServiceRatesByPages(page, size);
 			return ResponseEntity.ok(ratePages);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
