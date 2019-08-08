@@ -86,7 +86,7 @@ public class ServiceRatesController {
 		return ResponseEntity.ok().body(serviceRates.get().getRate() + "  Successfully Deleted");
 	}
 	
-	@GetMapping("/service/rates/userslist")
+	@GetMapping("/service/rateslist")
 	public ResponseEntity<Page<ServiceRates>> listServiceRatesByPages(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		try {
