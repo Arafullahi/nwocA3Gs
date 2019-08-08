@@ -67,6 +67,12 @@ public class ServiceRequestService {
 		}
 	}
 
+
+	public void update(ServiceRequests serviceRequests) {
+		serviceRequestRepository.saveAndFlush(serviceRequests);
+		
+	}
+
 	
 	
 

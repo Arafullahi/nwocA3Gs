@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,8 +27,11 @@ import com.nwoc.a3gs.group.app.dto.ServiceRatesDTO;
 import com.nwoc.a3gs.group.app.dto.ServiceRequestsDTO;
 import com.nwoc.a3gs.group.app.model.ServiceRates;
 import com.nwoc.a3gs.group.app.model.ServiceRequests;
+import com.nwoc.a3gs.group.app.model.ServiceStatus;
+import com.nwoc.a3gs.group.app.model.Workers;
 import com.nwoc.a3gs.group.app.repository.ServiceRequestRepository;
 import com.nwoc.a3gs.group.app.services.ServiceRequestService;
+import com.nwoc.a3gs.group.app.services.WorkerService;
 
 import javassist.NotFoundException;
 
@@ -37,6 +41,8 @@ public class ServiceRequestController {
 	
 	@Autowired
 	ServiceRequestService serviceRequestService;
+	@Autowired
+	WorkerService workerService;
 
 	private static final Logger LOGGER = LogManager.getLogger(ServiceRatesController.class);
 	
@@ -98,6 +104,33 @@ public class ServiceRequestController {
 
 			Page<ServiceRequests> reQuestPages = serviceRequestService.findServiceRequestByPages(page, size);
 			return ResponseEntity.ok(reQuestPages);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		}
+	}
+	
+	@GetMapping("/service/request/{serviceRequId}/assign/{workerId}")
+	public ResponseEntity<?> assignServiceToWorker(@PathVariable Long serviceRequestId,
+			@PathVariable Long workerId) {
+		try {
+			Optional<ServiceRequests> serviceReqOpt= serviceRequestService.findOne(serviceRequestId);
+			if(!serviceReqOpt.isPresent()){
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Service Request not available");
+			}
+			if(serviceReqOpt.get().getServiceStatus().equals(ServiceStatus.SERVICE_COMPLETED)){
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Service Request completed");
+			}
+			
+			Optional<Workers> workerOpt= workerService.findOne(workerId);
+			if(!workerOpt.isPresent()){
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Worker not available");
+			}
+			
+			ServiceRequests serviceRequests = serviceReqOpt.get();
+			serviceRequests.setWorker(workerOpt.get());
+			
+			serviceRequestService.update(serviceRequests);
+			return ResponseEntity.ok("Worker Assigned to Service request");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
