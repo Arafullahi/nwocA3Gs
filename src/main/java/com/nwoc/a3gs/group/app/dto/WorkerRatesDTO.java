@@ -2,31 +2,36 @@ package com.nwoc.a3gs.group.app.dto;
 
 import java.util.List;
 
+import com.nwoc.a3gs.group.app.model.Services;
+import com.nwoc.a3gs.group.app.model.Workers;
+
 public class WorkerRatesDTO {
 	
 
-	private Long id;
-	private List<Long>  serviceId;
-	private List<Long>  workerId;
+	private Long rate_id;
+	private Services  serviceId;
+	private Workers  workerId;
 	private String description;
 	private Double  rate;
 	private String unit;
-	public Long getId() {
-		return id;
+	
+	
+	public Long getRate_id() {
+		return rate_id;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setRate_id(Long rate_id) {
+		this.rate_id = rate_id;
 	}
-	public List<Long> getServiceId() {
+	public Services getServiceId() {
 		return serviceId;
 	}
-	public void setServiceId(List<Long> serviceId) {
+	public void setServiceId(Services serviceId) {
 		this.serviceId = serviceId;
 	}
-	public List<Long> getWorkerId() {
+	public Workers getWorkerId() {
 		return workerId;
 	}
-	public void setWorkerId(List<Long> workerId) {
+	public void setWorkerId(Workers workerId) {
 		this.workerId = workerId;
 	}
 	public String getDescription() {

@@ -1,7 +1,6 @@
 package com.nwoc.a3gs.group.app.model;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -27,14 +26,14 @@ public class WorkerRates {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-    private  Long id;
+    private  Long wrate_id;
 	
 	@OneToOne
 	@JoinColumn(name="id")
-	 private  List<Services> services;
+	 private  Services services;
 	@OneToOne
 	@JoinColumn(name="worker_id")
-	 private List<Workers> workers;
+	 private Workers workers;
     private  String description;
     private Double rate;
     private String unit;
@@ -48,27 +47,12 @@ public class WorkerRates {
 	@LastModifiedDate
 	private Date updateddAt;
 
-	public Long getId() {
-		return id;
+	public Long getRate_id() {
+		return wrate_id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public List<Services> getServices() {
-		return services;
-	}
-
-	public void setServices(List<Services> services) {
-		this.services = services;
-	}
-
-	public List<Workers> getWorkers() {
-		return workers;
-	}
-
-	public void setWorkers(List<Workers> workers) {
-		this.workers = workers;
+	public void setRate_id(Long wrate_id) {
+		this.wrate_id = wrate_id;
 	}
 
 	public String getDescription() {
@@ -109,6 +93,22 @@ public class WorkerRates {
 
 	public void setUpdateddAt(Date updateddAt) {
 		this.updateddAt = updateddAt;
+	}
+
+	public Services getServices() {
+		return services;
+	}
+
+	public void setServices(Services services) {
+		this.services = services;
+	}
+
+	public Workers getWorkers() {
+		return workers;
+	}
+
+	public void setWorkers(Workers workers) {
+		this.workers = workers;
 	}
 
 	
