@@ -51,7 +51,7 @@ public class WorkerRatesController {
 	}
 
 	@GetMapping("/worker/rates/{id}")
-	public ResponseEntity<?> getUserById(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<?> getWorkerRateById(@PathVariable(value = "id") Long id) {
 		Optional<WorkerRates> workerRate = workerRatesImpl.findOne(id);
 		if (!workerRate.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -61,7 +61,7 @@ public class WorkerRatesController {
 
 
 	@PutMapping("/worker/rates/{id}")
-	public ResponseEntity<?> updateUser(@PathVariable(value = "id") Long id, @RequestBody WorkerRates workerRates) {
+	public ResponseEntity<?> updateWorkerRates(@PathVariable(value = "id") Long id, @RequestBody WorkerRates workerRates) {
 		WorkerRates workerRateUpdate = null;
 		try {
 			workerRateUpdate = workerRatesImpl.update(workerRates, id);
@@ -73,7 +73,7 @@ public class WorkerRatesController {
 	}
 
 	@DeleteMapping("/worker/rates/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<?> deleteWorkerRates(@PathVariable(value = "id") Long id) {
 		Optional<WorkerRates> workerRates = workerRatesImpl.findOne(id);
 		if (!workerRates.isPresent()) {
 			return ((BodyBuilder) ResponseEntity.notFound()).body("User Not Found");
@@ -85,7 +85,7 @@ public class WorkerRatesController {
 	}
 
 	@GetMapping("/worker/rates/workerRatelist")
-	public ResponseEntity<Page<WorkerRates>> listServiceRatesByPages(@RequestParam(defaultValue = "0") int page,
+	public ResponseEntity<Page<WorkerRates>> listWorkerServiceRatesByPages(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		try {
 
