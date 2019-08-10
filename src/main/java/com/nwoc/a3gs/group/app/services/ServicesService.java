@@ -2,9 +2,13 @@ package com.nwoc.a3gs.group.app.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -79,6 +83,25 @@ public class ServicesService {
 		servicesRepository.save(services);
 		isUpdated=true;
 		return isUpdated;
+	}
+	
+	public List<Services> findMainService() {
+		return servicesRepository.findMainServices();
+		
+	}
+
+	public Set<Services> findChildService(Long id) throws NotFoundException {
+		Optional<Services> servicesOpt = findOne(id);
+		if(!servicesOpt.isPresent()){
+			throw new NotFoundException("Service not found");
+		}
+		return servicesOpt.get().getChildService();
+	}
+
+	public Page<Services> findServicesByPages(int page, int size) {
+		Pageable pageable = new PageRequest(page, size);
+
+		return servicesRepository.findAll(pageable);
 	}
 
 }
