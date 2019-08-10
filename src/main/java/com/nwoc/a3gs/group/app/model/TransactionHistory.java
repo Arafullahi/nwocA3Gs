@@ -14,7 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.NaturalId;
 import org.springframework.data.annotation.CreatedDate;
@@ -28,7 +28,7 @@ public class TransactionHistory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@NotBlank
+	@NotNull
 	@OneToOne
 	@JoinColumn(name = "serviceRequestId")
 	private ServiceRequests serviceRequests;
@@ -39,7 +39,6 @@ public class TransactionHistory {
 
 	private String amount;
 
-	private String date;
 	@Enumerated(EnumType.STRING)
 	@NaturalId
 	@Column(length = 60)
@@ -92,14 +91,6 @@ public class TransactionHistory {
 
 	public void setAmount(String amount) {
 		this.amount = amount;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
 	}
 
 	public PaymentStatus getPaymentStatus() {
