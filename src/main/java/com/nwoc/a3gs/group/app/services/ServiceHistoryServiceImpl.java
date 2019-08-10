@@ -3,6 +3,7 @@ package com.nwoc.a3gs.group.app.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nwoc.a3gs.group.app.dto.ServiceHistoryDTO;
 import com.nwoc.a3gs.group.app.model.ServiceHistory;
 import com.nwoc.a3gs.group.app.repository.ServiceHistoryRepository;
 
@@ -22,7 +24,9 @@ public class ServiceHistoryServiceImpl {
 	ServiceHistoryRepository serviceHistoryRepository;
 	
 	@Transactional
-	public ServiceHistory create(ServiceHistory serviceHistory) {
+	public ServiceHistory create(ServiceHistoryDTO serviceHistoryDTO) {
+		ServiceHistory serviceHistory = new ServiceHistory();
+		BeanUtils.copyProperties(serviceHistoryDTO,serviceHistory);
 		return serviceHistoryRepository.save(serviceHistory);
 	}
 	
@@ -34,19 +38,19 @@ public class ServiceHistoryServiceImpl {
 		return serviceHistoryRepository.findById(id);
 	}
 	
-	public ServiceHistory update(ServiceHistory serviceHistory, Long id) throws NotFoundException {
+	public ServiceHistory update(ServiceHistoryDTO serviceHistoryDTO, Long id) throws NotFoundException {
 		Optional<ServiceHistory> histOpt =findOne(id);
 		if(histOpt.isPresent()){
 			ServiceHistory serviceHistoryRate = histOpt.get();
-			serviceHistoryRate.setDescription(serviceHistory.getDescription());
-			serviceHistoryRate.setRate(serviceHistory.getRate());
-			serviceHistoryRate.setHours(serviceHistory.getHours());
-			serviceHistoryRate.setDate(serviceHistory.getDate());
-			serviceHistoryRate.setServiceRequests(serviceHistory.getServiceRequests());
-			serviceHistoryRate.setWorker(serviceHistory.getWorker());
+			serviceHistoryRate.setDescription(serviceHistoryDTO.getDescription());
+			serviceHistoryRate.setRate(serviceHistoryDTO.getRate());
+			serviceHistoryRate.setHours(serviceHistoryDTO.getHours());
+			serviceHistoryRate.setDate(serviceHistoryDTO.getDate());
+			serviceHistoryRate.setServiceRequests(serviceHistoryDTO.getServiceRequests());
+			serviceHistoryRate.setWorker(serviceHistoryDTO.getWorker());
 			return serviceHistoryRepository.saveAndFlush(serviceHistoryRate);
 		}else{
-			throw new NotFoundException("User not found exception");
+			throw new NotFoundException("Service History Details Not found");
 		}
 		
 	}

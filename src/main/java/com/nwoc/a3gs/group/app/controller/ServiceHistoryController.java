@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nwoc.a3gs.group.app.dto.ServiceHistoryDTO;
 import com.nwoc.a3gs.group.app.model.ServiceHistory;
 import com.nwoc.a3gs.group.app.services.ServiceHistoryServiceImpl;
 
@@ -34,9 +35,9 @@ public class ServiceHistoryController {
 	private static final Logger LOGGER = LogManager.getLogger(ServiceHistoryController.class);
 	
 	@PostMapping("/service/history")
-	public ResponseEntity<?> createServiceHistory(@RequestBody ServiceHistory serviceHistory) {
+	public ResponseEntity<?> createServiceHistory(@RequestBody ServiceHistoryDTO serviceHistoryDTO) {
 		try {
-		   serviceHistory = serviceHistoryServiceImpl.create(serviceHistory);
+			ServiceHistory serviceHistory = serviceHistoryServiceImpl.create(serviceHistoryDTO);
 			return ResponseEntity.ok(serviceHistory);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -54,21 +55,23 @@ public class ServiceHistoryController {
 	public ResponseEntity<?> getHistoryById(@PathVariable(value = "id") Long id) {
 		Optional<ServiceHistory> serviceHistory = serviceHistoryServiceImpl.findOne(id);
 		if (!serviceHistory.isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			//return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No History Found");
+			return ((BodyBuilder) ResponseEntity.notFound()).body("Service History Not Found");
 		}
 		return ResponseEntity.ok().body(serviceHistory.get());
 	}
 
 	
 	@PutMapping("/service/history/{id}")
-	public ResponseEntity<?> updateServiceHistory(@PathVariable(value = "id") Long id, @RequestBody ServiceHistory ServiceHistory) {
+	public ResponseEntity<?> updateServiceHistory(@PathVariable(value = "id") Long id, @RequestBody ServiceHistoryDTO ServiceHistoryDTO) {
+		ServiceHistory serviceHistory = null;
 		try {
-			ServiceHistory = serviceHistoryServiceImpl.update(ServiceHistory, id);
+			serviceHistory = serviceHistoryServiceImpl.update(ServiceHistoryDTO, id);
 		} catch (NotFoundException e) {
 			LOGGER.error(e.getMessage(),e);
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
-		return ResponseEntity.ok().body(ServiceHistory);
+		return ResponseEntity.ok().body(serviceHistory);
 	}
 	
 	@DeleteMapping("/service/history/{id}")
