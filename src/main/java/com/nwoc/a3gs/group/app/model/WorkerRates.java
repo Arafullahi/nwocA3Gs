@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -27,15 +28,18 @@ public class WorkerRates {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private  Long wrate_id;
-	
+	@NotNull(message = "Please enter Services")
 	@OneToOne
 	@JoinColumn(name="id")
 	 private  Services services;
+	@NotNull(message = "Please enter workers")
 	@OneToOne
 	@JoinColumn(name="worker_id")
 	 private Workers workers;
     private  String description;
+    @NotNull(message = "Please enter rate")
     private Double rate;
+    @NotNull(message = "Please enter unit")
     private String unit;
     @JsonIgnore
 	@Temporal(TemporalType.TIMESTAMP)
