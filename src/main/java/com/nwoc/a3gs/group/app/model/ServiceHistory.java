@@ -41,8 +41,6 @@ public class ServiceHistory {
 	@NotNull(message = "Please enter hours")
 	private Float hours;
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date date;
-	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
 	private Date createdAt;
 	@JsonIgnore
@@ -97,15 +95,6 @@ public class ServiceHistory {
 	public void setHours(Float hours) {
 		this.hours = hours;
 	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
 	public Date getCreatedAt() {
 		return createdAt;
 	}

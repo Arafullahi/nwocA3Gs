@@ -45,7 +45,6 @@ public class ServiceHistoryServiceImpl {
 			serviceHistoryRate.setDescription(serviceHistoryDTO.getDescription());
 			serviceHistoryRate.setRate(serviceHistoryDTO.getRate());
 			serviceHistoryRate.setHours(serviceHistoryDTO.getHours());
-			serviceHistoryRate.setDate(serviceHistoryDTO.getDate());
 			serviceHistoryRate.setServiceRequests(serviceHistoryDTO.getServiceRequests());
 			serviceHistoryRate.setWorker(serviceHistoryDTO.getWorker());
 			return serviceHistoryRepository.saveAndFlush(serviceHistoryRate);
