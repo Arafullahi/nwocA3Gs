@@ -46,19 +46,38 @@ public class ServiceHistoryController {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@GetMapping("/service/history")
 	public List<ServiceHistory> getAllHistory() {
-		return serviceHistoryServiceImpl.findAll();
+		try {
+			return serviceHistoryServiceImpl.findAll();
+		} catch(Exception e) {
+			
+			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
+			return (List<ServiceHistory>) ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			
+		}
+		
 	}
 
 	@GetMapping("/service/history/{id}")
 	public ResponseEntity<?> getHistoryById(@PathVariable(value = "id") Long id) {
-		Optional<ServiceHistory> serviceHistory = serviceHistoryServiceImpl.findOne(id);
-		if (!serviceHistory.isPresent()) {
-			//return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No History Found");
-			return ((BodyBuilder) ResponseEntity.notFound()).body("Service History Not Found");
+		try {
+			Optional<ServiceHistory> serviceHistory = serviceHistoryServiceImpl.findOne(id);
+			if (!serviceHistory.isPresent()) {
+				//return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No History Found");
+				return ((BodyBuilder) ResponseEntity.notFound()).body("Service History Not Found");
+			}
+			return ResponseEntity.ok().body(serviceHistory.get());
+			
+		} catch (Exception e) {
+			
+			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
+			return  ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
-		return ResponseEntity.ok().body(serviceHistory.get());
+		
 	}
 
 	
@@ -76,13 +95,24 @@ public class ServiceHistoryController {
 	
 	@DeleteMapping("/service/history/{id}")
 	public ResponseEntity<?> deleteServiceHistory(@PathVariable(value = "id") Long id) {
-		Optional<ServiceHistory> serviceHistory = serviceHistoryServiceImpl.findOne(id);
-		if (!serviceHistory.isPresent()) {
-			return ((BodyBuilder) ResponseEntity.notFound()).body("User Not Found");
-		}
+		try {
+			
+			Optional<ServiceHistory> serviceHistory = serviceHistoryServiceImpl.findOne(id);
+			if (!serviceHistory.isPresent()) {
+				return ((BodyBuilder) ResponseEntity.notFound()).body("User Not Found");
+			}
 
-		serviceHistoryServiceImpl.delete(serviceHistory.get());
-		return ResponseEntity.ok().body(serviceHistory.get().getRate() + "  Successfully Deleted");
+			serviceHistoryServiceImpl.delete(serviceHistory.get());
+			return ResponseEntity.ok().body(serviceHistory.get().getRate() + "  Successfully Deleted");
+			
+		} catch (Exception e) {
+			
+			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
+			return  ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			
+		}
+		
 	}
 	
 	@GetMapping("/service/historylist")
@@ -93,6 +123,9 @@ public class ServiceHistoryController {
 			Page<ServiceHistory> ratePages = serviceHistoryServiceImpl.findServiceHistoryByPages(page, size);
 			return ResponseEntity.ok(ratePages);
 		} catch (Exception e) {
+			
+			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
 	}
