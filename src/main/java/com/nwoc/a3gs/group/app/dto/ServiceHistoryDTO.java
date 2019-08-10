@@ -1,38 +1,18 @@
-package com.nwoc.a3gs.group.app.model;
+package com.nwoc.a3gs.group.app.dto;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import com.nwoc.a3gs.group.app.model.ServiceRequests;
+import com.nwoc.a3gs.group.app.model.Workers;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+public class ServiceHistoryDTO {
 
-
-@Entity
-@Table(name = "servicerequestsHistory")
-public class ServiceHistory {
-
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@NotNull(message = "Please enter Service Requests")
-	@OneToOne
-	@JoinColumn(name="serviceRequestId")
 	private ServiceRequests serviceRequests;
 	@NotNull(message = "Please enter worker")
-	@OneToOne
-	@JoinColumn(name="workerId")
 	private Workers worker;
 	
 	private String description;
@@ -40,15 +20,8 @@ public class ServiceHistory {
 	private Double rate;
 	@NotNull(message = "Please enter hours")
 	private Float hours;
-	@Temporal(TemporalType.TIMESTAMP)
+
 	private Date date;
-	@Temporal(TemporalType.TIMESTAMP)
-	@CreatedDate
-	private Date createdAt;
-	@JsonIgnore
-	@Temporal(TemporalType.TIMESTAMP)
-	@LastModifiedDate
-	private Date updateddAt;
 
 	public Long getId() {
 		return id;
@@ -105,23 +78,8 @@ public class ServiceHistory {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public Date getUpdateddAt() {
-		return updateddAt;
-	}
-
-	public void setUpdateddAt(Date updateddAt) {
-		this.updateddAt = updateddAt;
-	}
 	
 	
 	
+
 }
