@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nwoc.a3gs.group.app.dto.WorkerRatesDTO;
 import com.nwoc.a3gs.group.app.model.WorkerRates;
 import com.nwoc.a3gs.group.app.services.WorkerRatesServiceImpl;
 
@@ -34,9 +35,9 @@ public class WorkerRatesController {
 	private static final Logger LOGGER = LogManager.getLogger(WorkerRatesController.class);
 
 	@PostMapping("/worker/rates")
-	public ResponseEntity<?> createWorkerRates(@RequestBody WorkerRates workerRates) {
+	public ResponseEntity<?> createWorkerRates(@RequestBody WorkerRatesDTO workerRatesDTO) {
 		try {
-			 workerRates = workerRatesImpl.create(workerRates);
+			 WorkerRates workerRates = workerRatesImpl.create(workerRatesDTO);
 			return ResponseEntity.ok(workerRates);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -45,26 +46,45 @@ public class WorkerRatesController {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@GetMapping("/worker/rates")
 	public List<WorkerRates> getAllUsers() {
-		return workerRatesImpl.findAll();
+		try {
+			return workerRatesImpl.findAll();
+		} catch (Exception e) {
+			
+			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
+			return (List<WorkerRates>) ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+		
 	}
 
 	@GetMapping("/worker/rates/{id}")
 	public ResponseEntity<?> getWorkerRateById(@PathVariable(value = "id") Long id) {
-		Optional<WorkerRates> workerRate = workerRatesImpl.findOne(id);
-		if (!workerRate.isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		try {
+			Optional<WorkerRates> workerRate = workerRatesImpl.findOne(id);
+			if (!workerRate.isPresent()) {
+				//return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+				return ((BodyBuilder) ResponseEntity.notFound()).body("Worker Rate Not Found");
+			}
+			return ResponseEntity.ok().body(workerRate.get());
+			
+		} catch (Exception e) {
+			
+			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
+			return  ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
-		return ResponseEntity.ok().body(workerRate.get());
+		
 	}
 
 
 	@PutMapping("/worker/rates/{id}")
-	public ResponseEntity<?> updateWorkerRates(@PathVariable(value = "id") Long id, @RequestBody WorkerRates workerRates) {
+	public ResponseEntity<?> updateWorkerRates(@PathVariable(value = "id") Long id, @RequestBody WorkerRatesDTO workerRatesDTO) {
 		WorkerRates workerRateUpdate = null;
 		try {
-			workerRateUpdate = workerRatesImpl.update(workerRates, id);
+			workerRateUpdate = workerRatesImpl.update(workerRatesDTO, id);
 		} catch (NotFoundException e) {
 			LOGGER.error(e.getMessage(),e);
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -74,14 +94,23 @@ public class WorkerRatesController {
 
 	@DeleteMapping("/worker/rates/{id}")
 	public ResponseEntity<?> deleteWorkerRates(@PathVariable(value = "id") Long id) {
-		Optional<WorkerRates> workerRates = workerRatesImpl.findOne(id);
-		if (!workerRates.isPresent()) {
-			return ((BodyBuilder) ResponseEntity.notFound()).body("User Not Found");
-			
-		}
+		try {
+			Optional<WorkerRates> workerRates = workerRatesImpl.findOne(id);
+			if (!workerRates.isPresent()) {
+				return ((BodyBuilder) ResponseEntity.notFound()).body("User Not Found");
+				
+			}
 
-		workerRatesImpl.delete(workerRates.get());
-		return ResponseEntity.ok().body(workerRates.get().getRate() + "  Successfully Deleted");
+			workerRatesImpl.delete(workerRates.get());
+			return ResponseEntity.ok().body(workerRates.get().getRate() + "  Successfully Deleted");
+		}catch (Exception e) {
+			
+			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		
+		}
+		
 	}
 
 	@GetMapping("/worker/rates/workerRatelist")
@@ -92,6 +121,8 @@ public class WorkerRatesController {
 			Page<WorkerRates> ratePages = workerRatesImpl.findWorkerRatesByPages(page, size);
 			return ResponseEntity.ok(ratePages);
 		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
 	}
