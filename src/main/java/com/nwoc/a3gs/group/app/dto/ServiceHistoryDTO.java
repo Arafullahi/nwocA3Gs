@@ -1,6 +1,5 @@
 package com.nwoc.a3gs.group.app.dto;
 
-import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
@@ -20,8 +19,6 @@ public class ServiceHistoryDTO {
 	private Double rate;
 	@NotNull(message = "Please enter hours")
 	private Float hours;
-
-	private Date date;
 
 	public Long getId() {
 		return id;
@@ -70,15 +67,6 @@ public class ServiceHistoryDTO {
 	public void setHours(Float hours) {
 		this.hours = hours;
 	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	
 	
 	
 
