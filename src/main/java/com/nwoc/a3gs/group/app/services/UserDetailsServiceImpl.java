@@ -1,13 +1,18 @@
 package com.nwoc.a3gs.group.app.services;
 
+import com.nwoc.a3gs.group.app.model.Role;
+import com.nwoc.a3gs.group.app.model.RoleName;
 import com.nwoc.a3gs.group.app.model.User;
 import com.nwoc.a3gs.group.app.repository.RoleRepository;
 import com.nwoc.a3gs.group.app.repository.UserRepository;
 
 import javassist.NotFoundException;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,6 +48,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Transactional
 	public User save(User user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        
+        if(user.getRoles()!=null){
+			Set<Role> roles= user.getRoles().stream().map(x->roleRepository.findByName(RoleName.ROLE_USER).get()).collect(Collectors.toSet());
+			user.setRoles(roles);
+		}
 		return userRepository.save(user);
 	}
 	
@@ -62,8 +72,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			usr.setEmail(user.getEmail());
 			usr.setAge(user.getAge());
 			usr.setLocation(user.getLocation());
-			//usr.setUpdateddAt(user.getUpdateddAt());
-			usr.setRoles(user.getRoles());
+			if(user.getRoles()!=null){
+				Set<Role> roles= user.getRoles().stream().map(x->roleRepository.findByName(x.getName()).get()).collect(Collectors.toSet());
+				usr.setRoles(roles);
+			}
+			
+			
 			return userRepository.saveAndFlush(usr);
 		}else{
 			throw new NotFoundException("User not found exception");
