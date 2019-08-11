@@ -11,7 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -25,12 +25,12 @@ public class ServiceComments {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@NotBlank
+	@NotNull
 	@OneToOne
 	@JoinColumn(name="serviceRequestId")
 	private ServiceRequests serviceRequests;
 	
-	@NotBlank
+	@NotNull
 	@OneToOne
 	@JoinColumn(name="workerId")
 	private Workers worker;
@@ -39,8 +39,7 @@ public class ServiceComments {
 	
 	private Integer starRate;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date date;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
 	private Date createdAt;
@@ -88,14 +87,6 @@ public class ServiceComments {
 
 	public void setStarRate(Integer starRate) {
 		this.starRate = starRate;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
 	}
 
 	public Date getCreatedAt() {
