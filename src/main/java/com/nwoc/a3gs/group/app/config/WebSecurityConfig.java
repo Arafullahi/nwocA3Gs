@@ -57,14 +57,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().
                 authorizeRequests()
-                .antMatchers("/api/auth/**","/api/**","/resources/**","/admin/**").permitAll()
-                .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**","/auth/login","/","/home","/**.js","/**.css")
+                .antMatchers("/api/auth/**","/api/**","/resources/**","/admin/**","/h2/**").permitAll()
+                .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**","/h2/**", "/webjars/**","/auth/login","/signup","/","/home","/**.js","/**.css","*.ico")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        
+        http.headers().disable();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

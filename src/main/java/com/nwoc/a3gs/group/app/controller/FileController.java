@@ -75,7 +75,7 @@ public class FileController {
 				.body(resource);
 	}
 	
-	@RequestMapping({ "/home", "/auth/login" })
+	@RequestMapping({ "/home", "/auth/login","/signup" })
 	   public String index() {
 	       return "forward:/";
 	   }

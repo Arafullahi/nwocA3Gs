@@ -2,6 +2,7 @@ package com.nwoc.a3gs.group.app.controller;
 
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -117,6 +118,18 @@ public class WorkerController {
 
 			Page<Workers> workerPages = workerService.findWorkerByPages(page, size);
 			return ResponseEntity.ok(workerPages);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		}
+	}
+	@GetMapping("/services/workers/{serviceId}")
+	public ResponseEntity<List<Workers>> findWorkersByServiceId(@PathVariable(value = "serviceId") Long serviceId) {
+		try {
+
+			List<Workers> workers = workerService.findWorkersByServiceId(serviceId);
+			return ResponseEntity.ok(workers);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			System.out.println(e.getMessage());

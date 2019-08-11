@@ -98,12 +98,58 @@ public class ServiceRequestController {
 	}*/
 	
 	@GetMapping("/service/requestlist")
-	public ResponseEntity<Page<ServiceRequests>> listServiceRatesByPages(@RequestParam(defaultValue = "0") int page,
+	public ResponseEntity<Page<ServiceRequests>> findServiceRequestByPages(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		try {
 
 			Page<ServiceRequests> reQuestPages = serviceRequestService.findServiceRequestByPages(page, size);
 			return ResponseEntity.ok(reQuestPages);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		}
+	}
+	
+	@GetMapping("/service/requestlist/completed")
+	public ResponseEntity<Page<ServiceRequests>> findCompletedServiceRequestByPages(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size) {
+		try {
+
+			Page<ServiceRequests> reQuestPages = serviceRequestService.findCompletedServiceRequestByPages(page, size);
+			return ResponseEntity.ok(reQuestPages);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		}
+	}
+	
+	@GetMapping("/service/requestlist/amountpaid")
+	public ResponseEntity<Page<ServiceRequests>> findPaidServiceRequestByPages(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size) {
+		try {
+
+			Page<ServiceRequests> reQuestPages = serviceRequestService.findPayedServiceRequestByPages(page, size);
+			return ResponseEntity.ok(reQuestPages);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		}
+	}
+	
+	@GetMapping("/service/requestlist/amountnotpaid")
+	public ResponseEntity<Page<ServiceRequests>> findNotPaidServiceRequestByPages(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size) {
+		try {
+			Page<ServiceRequests> reQuestPages = serviceRequestService.findNotPayedServiceRequestByPages(page, size);
+			return ResponseEntity.ok(reQuestPages);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		}
+	}
+	
+	@GetMapping("/service/request/{username}")
+	public ResponseEntity<List<ServiceRequests>> listServiceRequestsByUsername(@PathVariable(value = "username") String username) {
+		try {
+
+			List<ServiceRequests> reQuests = serviceRequestService.listServiceRequestsByUsername(username);
+			return ResponseEntity.ok(reQuests);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}

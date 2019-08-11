@@ -66,7 +66,12 @@ public class WorkerService {
 
 	public Page<Workers> findWorkerByPages(int pageNumber, int size) {
 		Pageable pageable = new PageRequest(pageNumber, size);
-
 		return workerRepository.findAll(pageable);
+	}
+
+
+	public List<Workers> findWorkersByServiceId(Long serviceId) {
+		
+		return workerRepository.findByServices_id(serviceId);
 	}
 }
