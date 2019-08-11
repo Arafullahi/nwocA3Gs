@@ -1,4 +1,4 @@
-package com.nwoc.a3gs.group;
+package com.demo.jwt.authentication;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest*/
 public class ApplicationTests {
 
-	//@Test
+	/*@Test*/
 	public void contextLoads() {
 	}
 

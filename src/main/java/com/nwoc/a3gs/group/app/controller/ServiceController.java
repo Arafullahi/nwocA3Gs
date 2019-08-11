@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nwoc.a3gs.group.app.dto.ServicesDTO;
@@ -27,6 +28,7 @@ import com.nwoc.a3gs.group.app.services.ServicesService;
 import javassist.NotFoundException;
 
 @Controller
+@RequestMapping("/api")
 public class ServiceController {
 
 	@Autowired

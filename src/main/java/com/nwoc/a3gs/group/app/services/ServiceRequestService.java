@@ -8,11 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.nwoc.a3gs.group.app.dto.ServiceRequestsDTO;
 import com.nwoc.a3gs.group.app.model.ServiceRequests;
+import com.nwoc.a3gs.group.app.model.ServiceStatus;
+import com.nwoc.a3gs.group.app.model.User;
 import com.nwoc.a3gs.group.app.repository.ServiceRequestRepository;
+import com.nwoc.a3gs.group.app.repository.UserRepository;
 
 import javassist.NotFoundException;
 
@@ -21,12 +25,18 @@ public class ServiceRequestService {
 	
 	@Autowired
 	ServiceRequestRepository serviceRequestRepository;
-	
+	@Autowired
+	UserRepository userRepository;
 
-	public ServiceRequests create(ServiceRequestsDTO serviceRatesDTO) {
+	public ServiceRequests create(ServiceRequestsDTO serviceRatesDTO) throws NotFoundException {
 		
 		ServiceRequests serviceRequests = new ServiceRequests();
 		BeanUtils.copyProperties(serviceRatesDTO, serviceRequests);
+		Optional<User> userOpt= userRepository.findByUsername(serviceRatesDTO.getCustomer().getUsername());
+		if(!userOpt.isPresent()){
+			throw new NotFoundException("User not found");
+		}
+		serviceRequests.setCustomer(userOpt.get());
 		serviceRequests= serviceRequestRepository.save(serviceRequests);
 		return serviceRequests;
 	}
@@ -71,6 +81,28 @@ public class ServiceRequestService {
 	public void update(ServiceRequests serviceRequests) {
 		serviceRequestRepository.saveAndFlush(serviceRequests);
 		
+	}
+
+
+	public List<ServiceRequests> listServiceRequestsByUsername(String username) {
+		// TODO Auto-generated method stub
+		return serviceRequestRepository.findByCustomer_Username(username);
+	}
+
+
+	public Page<ServiceRequests> findCompletedServiceRequestByPages(int page, int size) {
+		// TODO Auto-generated method stub
+		return serviceRequestRepository.findByServiceStatus(ServiceStatus.SERVICE_COMPLETED);
+	}
+	
+	public Page<ServiceRequests> findPayedServiceRequestByPages(int page, int size) {
+		// TODO Auto-generated method stub
+		return serviceRequestRepository.findByServiceStatus(ServiceStatus.AMOUNT_PAYED);
+	}
+	
+	public Page<ServiceRequests> findNotPayedServiceRequestByPages(int page, int size) {
+		// TODO Auto-generated method stub
+		return serviceRequestRepository.findByServiceStatus(ServiceStatus.SERVICE_REQUESTED);
 	}
 
 	
