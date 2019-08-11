@@ -3,6 +3,7 @@ package com.nwoc.a3gs.group.app.repository;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -13,6 +14,6 @@ public interface ServiceRequestRepository extends JpaRepository<ServiceRequests,
 
 	List<ServiceRequests> findByCustomer_Username(String username);
 
-	Page<ServiceRequests> findByServiceStatus(ServiceStatus serviceStatus);
+	Page<ServiceRequests> findByServiceStatus(Pageable page ,ServiceStatus serviceStatus);
 
 }
