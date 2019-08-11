@@ -91,18 +91,18 @@ public class ServiceRequestService {
 
 
 	public Page<ServiceRequests> findCompletedServiceRequestByPages(int page, int size) {
-		// TODO Auto-generated method stub
-		return serviceRequestRepository.findByServiceStatus(ServiceStatus.SERVICE_COMPLETED);
+		Pageable pageable = new PageRequest(page, size);
+		return serviceRequestRepository.findByServiceStatus(pageable,ServiceStatus.SERVICE_COMPLETED);
 	}
 	
 	public Page<ServiceRequests> findPayedServiceRequestByPages(int page, int size) {
-		// TODO Auto-generated method stub
-		return serviceRequestRepository.findByServiceStatus(ServiceStatus.AMOUNT_PAYED);
+		Pageable pageable = new PageRequest(page, size);
+		return serviceRequestRepository.findByServiceStatus(pageable,ServiceStatus.AMOUNT_PAYED);
 	}
 	
 	public Page<ServiceRequests> findNotPayedServiceRequestByPages(int page, int size) {
-		// TODO Auto-generated method stub
-		return serviceRequestRepository.findByServiceStatus(ServiceStatus.SERVICE_REQUESTED);
+		Pageable pageable = new PageRequest(page, size);
+		return serviceRequestRepository.findByServiceStatus(pageable,ServiceStatus.SERVICE_REQUESTED);
 	}
 
 	
