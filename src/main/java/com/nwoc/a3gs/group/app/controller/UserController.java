@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nwoc.a3gs.group.app.message.request.SignUpForm;
 import com.nwoc.a3gs.group.app.model.User;
 import com.nwoc.a3gs.group.app.services.UserDetailsServiceImpl;
 
@@ -38,9 +39,10 @@ public class UserController {
 	private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
 	@PostMapping
-	public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
+	public ResponseEntity<?> createUser(@Valid @RequestBody SignUpForm signUpRequest) {
 		try {
-			user = userService.save(user);
+			User user = new User();
+			user = userService.save(signUpRequest);
 			return ResponseEntity.ok(user);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -64,10 +66,10 @@ public class UserController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long id, @Valid @RequestBody User user) {
+	public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long id, @Valid @RequestBody SignUpForm signUpRequest) {
 		User userUpdate = null;
 		try {
-			userUpdate = userService.update(user, id);
+			userUpdate = userService.update(signUpRequest, id);
 		} catch (NotFoundException e) {
 			LOGGER.error(e.getMessage(),e);
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
