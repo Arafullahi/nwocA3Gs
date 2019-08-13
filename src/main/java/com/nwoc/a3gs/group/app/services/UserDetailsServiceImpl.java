@@ -10,6 +10,7 @@ import javassist.NotFoundException;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,12 +47,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	RoleRepository roleRepository;
 
 	@Transactional
-	public User save(User user) {
+	public User save(User user) throws NotFoundException {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         
         if(user.getRoles()!=null){
-			Set<Role> roles= user.getRoles().stream().map(x->roleRepository.findByName(RoleName.ROLE_USER).get()).collect(Collectors.toSet());
-			user.setRoles(roles);
+        	try{
+        		Set<Role> roles= user.getRoles().stream().map(x->roleRepository.findByName(RoleName.ROLE_USER).get()).collect(Collectors.toSet());
+    			user.setRoles(roles);
+        	}catch (NoSuchElementException e) {
+				throw new NotFoundException("Role not found");
+			}
+			
 		}
 		return userRepository.save(user);
 	}
@@ -73,8 +79,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			usr.setAge(user.getAge());
 			usr.setLocation(user.getLocation());
 			if(user.getRoles()!=null){
-				Set<Role> roles= user.getRoles().stream().map(x->roleRepository.findByName(x.getName()).get()).collect(Collectors.toSet());
-				usr.setRoles(roles);
+				try{
+					Set<Role> roles= user.getRoles().stream().map(x->roleRepository.findByName(x.getName()).get()).collect(Collectors.toSet());
+					usr.setRoles(roles);
+	        	}catch (NoSuchElementException e) {
+					throw new NotFoundException("Role not found");
+				}
+				
 			}
 			
 			
