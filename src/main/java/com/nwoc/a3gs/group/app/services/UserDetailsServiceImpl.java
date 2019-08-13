@@ -1,5 +1,6 @@
 package com.nwoc.a3gs.group.app.services;
 
+import com.nwoc.a3gs.group.app.dto.ResetPasswordDTO;
 import com.nwoc.a3gs.group.app.model.User;
 import com.nwoc.a3gs.group.app.repository.RoleRepository;
 import com.nwoc.a3gs.group.app.repository.UserRepository;
@@ -70,6 +71,23 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		}
 		
 	}
+	
+	public User reset(ResetPasswordDTO resetPasswordDTO) throws NotFoundException {
+		
+		Optional<User> userOpt= userRepository.findByUsername(resetPasswordDTO.getUserName());
+		if(!userOpt.isPresent()){
+			throw new NotFoundException("User not found");
+		}
+		User usr = userOpt.get();
+			if((resetPasswordDTO.getOldpassWord()).equals(usr.getPassword())) {
+				usr.setPassword(resetPasswordDTO.getNewPassword());
+				usr= userRepository.saveAndFlush(usr);
+				return usr;
+			}else{
+				throw new NotFoundException("Old PassWord is not correct");
+			}
+		}
+	
 
 	public List<User> findAll() {
 		return userRepository.findAll();

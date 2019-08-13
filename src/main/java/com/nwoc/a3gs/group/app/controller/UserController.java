@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nwoc.a3gs.group.app.dto.ResetPasswordDTO;
 import com.nwoc.a3gs.group.app.model.User;
 import com.nwoc.a3gs.group.app.services.UserDetailsServiceImpl;
 
@@ -74,6 +76,21 @@ public class UserController {
 		}
 		return ResponseEntity.ok().body(userUpdate);
 	}
+	
+	
+	@PatchMapping("/resetpassword")
+	public ResponseEntity<?> PasswordReset(@Valid @RequestBody ResetPasswordDTO resetPasswordDTO){
+			try {
+				User resetpass = userService.reset(resetPasswordDTO);
+				return ResponseEntity.ok().body(resetpass);
+			}
+			catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				System.out.println(e.getMessage());
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			}
+	}
+	
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteUser(@PathVariable(value = "id") Long id) {
