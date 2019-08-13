@@ -1,5 +1,7 @@
 package com.nwoc.a3gs.group.app.services;
 
+import com.nwoc.a3gs.group.app.model.Role;
+import com.nwoc.a3gs.group.app.model.RoleName;
 import com.nwoc.a3gs.group.app.dto.ResetPasswordDTO;
 import com.nwoc.a3gs.group.app.model.User;
 import com.nwoc.a3gs.group.app.repository.RoleRepository;
@@ -8,7 +10,10 @@ import com.nwoc.a3gs.group.app.repository.UserRepository;
 import javassist.NotFoundException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,8 +47,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	RoleRepository roleRepository;
 
 	@Transactional
-	public User save(User user) {
+	public User save(User user) throws NotFoundException {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        
+        if(user.getRoles()!=null){
+        	try{
+        		Set<Role> roles= user.getRoles().stream().map(x->roleRepository.findByName(RoleName.ROLE_USER).get()).collect(Collectors.toSet());
+    			user.setRoles(roles);
+        	}catch (NoSuchElementException e) {
+				throw new NotFoundException("Role not found");
+			}
+			
+		}
 		return userRepository.save(user);
 	}
 	
@@ -63,8 +78,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			usr.setEmail(user.getEmail());
 			usr.setAge(user.getAge());
 			usr.setLocation(user.getLocation());
-			//usr.setUpdateddAt(user.getUpdateddAt());
-			usr.setRoles(user.getRoles());
+			if(user.getRoles()!=null){
+				try{
+					Set<Role> roles= user.getRoles().stream().map(x->roleRepository.findByName(x.getName()).get()).collect(Collectors.toSet());
+					usr.setRoles(roles);
+	        	}catch (NoSuchElementException e) {
+					throw new NotFoundException("Role not found");
+				}
+				
+			}
+			
+			
 			return userRepository.saveAndFlush(usr);
 		}else{
 			throw new NotFoundException("User not found exception");
@@ -72,7 +96,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		
 	}
 	
-	public User reset(ResetPasswordDTO resetPasswordDTO) throws NotFoundException {
+    public User reset(ResetPasswordDTO resetPasswordDTO) throws NotFoundException {
 		
 		Optional<User> userOpt= userRepository.findByUsername(resetPasswordDTO.getUserName());
 		if(!userOpt.isPresent()){
@@ -87,7 +111,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 				throw new NotFoundException("Old PassWord is not correct");
 			}
 		}
-	
 
 	public List<User> findAll() {
 		return userRepository.findAll();

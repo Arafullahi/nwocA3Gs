@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nwoc.a3gs.group.app.dto.ResetPasswordDTO;
+import com.jfilter.filter.FieldFilterSetting;
 import com.nwoc.a3gs.group.app.model.User;
 import com.nwoc.a3gs.group.app.services.UserDetailsServiceImpl;
 
@@ -39,7 +41,8 @@ public class UserController {
 	UserDetailsServiceImpl userService;
 	private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
-	@PostMapping
+	@FieldFilterSetting(className = User.class, fields = {"id", "password"})
+	@PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
 		try {
 			user = userService.save(user);
@@ -56,6 +59,7 @@ public class UserController {
 		return userService.findAll();
 	}
 
+	@FieldFilterSetting(className = User.class, fields = {"id", "password"})
 	@GetMapping("/{id}")
 	public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long id) {
 		Optional<User> user = userService.findOne(id);
@@ -65,7 +69,7 @@ public class UserController {
 		return ResponseEntity.ok().body(user.get());
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping(value="/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long id, @Valid @RequestBody User user) {
 		User userUpdate = null;
 		try {
@@ -76,7 +80,6 @@ public class UserController {
 		}
 		return ResponseEntity.ok().body(userUpdate);
 	}
-	
 	
 	@PatchMapping("/resetpassword")
 	public ResponseEntity<?> PasswordReset(@Valid @RequestBody ResetPasswordDTO resetPasswordDTO){
@@ -90,7 +93,6 @@ public class UserController {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 			}
 	}
-	
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteUser(@PathVariable(value = "id") Long id) {
