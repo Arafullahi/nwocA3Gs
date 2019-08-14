@@ -23,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
     UserRepository userRepository;
+	
+	@Autowired
+	PasswordEncoder encoder;
 
 	@Override
 	@Transactional
@@ -103,8 +107,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throw new NotFoundException("User not found");
 		}
 		User usr = userOpt.get();
-			if((resetPasswordDTO.getOldpassWord()).equals(usr.getPassword())) {
-				usr.setPassword(resetPasswordDTO.getNewPassword());
+		String pass = resetPasswordDTO.getOldpassWord();
+			if(encoder.matches(pass, usr.getPassword())) {
+				usr.setPassword(encoder.encode(resetPasswordDTO.getNewPassword()));
 				usr= userRepository.saveAndFlush(usr);
 				return usr;
 			}else{

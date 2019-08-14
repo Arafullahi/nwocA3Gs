@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nwoc.a3gs.group.app.dto.ResetPasswordDTO;
+import com.nwoc.a3gs.group.app.message.response.ResponseMessage;
 import com.jfilter.filter.FieldFilterSetting;
 import com.nwoc.a3gs.group.app.model.User;
 import com.nwoc.a3gs.group.app.services.UserDetailsServiceImpl;
@@ -85,8 +86,8 @@ public class UserController {
 	public ResponseEntity<?> PasswordReset(@Valid @RequestBody ResetPasswordDTO resetPasswordDTO){
 			try {
 				User resetpass = userService.reset(resetPasswordDTO);
-				return ResponseEntity.ok().body(resetpass);
-			}
+				return new ResponseEntity<>(new ResponseMessage("Password Reset Successfully Completed!"), HttpStatus.OK);
+				}
 			catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
 				System.out.println(e.getMessage());
