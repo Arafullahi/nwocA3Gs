@@ -52,7 +52,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Transactional
 	public User save(User user) throws NotFoundException {
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        user.setPassword(encoder.encode(user.getPassword()));
         
         if(user.getRoles()!=null){
         	try{
@@ -71,11 +71,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		if(usrOpt.isPresent()){
 			User usr = usrOpt.get();
 			if(user.getPassword().equals("") || user.getPassword() == null ) {
-				usr.setPassword(new BCryptPasswordEncoder().encode(usr.getPassword()));
+				usr.setPassword(encoder.encode(usr.getPassword()));
 			}
 			else
 			{
-				usr.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+				usr.setPassword(encoder.encode(user.getPassword()));
 			}
 			usr.setName(user.getName());
 			usr.setPhone(user.getPhone());
