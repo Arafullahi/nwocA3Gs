@@ -28,11 +28,11 @@ public class ServiceRequestService {
 	@Autowired
 	UserRepository userRepository;
 
-	public ServiceRequests create(ServiceRequestsDTO serviceRatesDTO) throws NotFoundException {
+	public ServiceRequests create(ServiceRequestsDTO serviceRequestsDTO) throws NotFoundException {
 		
 		ServiceRequests serviceRequests = new ServiceRequests();
-		BeanUtils.copyProperties(serviceRatesDTO, serviceRequests);
-		Optional<User> userOpt= userRepository.findByUsername(serviceRatesDTO.getCustomer().getUsername());
+		BeanUtils.copyProperties(serviceRequestsDTO, serviceRequests);
+		Optional<User> userOpt= userRepository.findByUsername(serviceRequestsDTO.getCustomer().getUsername());
 		if(!userOpt.isPresent()){
 			throw new NotFoundException("User not found");
 		}
@@ -67,10 +67,14 @@ public class ServiceRequestService {
 
 	public ServiceRequests update(ServiceRequestsDTO serviceRequestsDTO, Long id) throws NotFoundException {
 		Optional<ServiceRequests> serviceReqsOPt =findOne(id);
+		Optional<User> userOpt= userRepository.findByUsername(serviceRequestsDTO.getCustomer().getUsername());
+		if(!userOpt.isPresent()){
+			throw new NotFoundException("User not found");
+		}
 		if(serviceReqsOPt.isPresent()){
 			ServiceRequests serviceRequests = serviceReqsOPt.get();
-			BeanUtils.copyProperties(serviceRequestsDTO, serviceRequests);
-			
+			BeanUtils.copyProperties(serviceRequestsDTO, serviceRequests);	
+			serviceRequests.setCustomer(userOpt.get());
 			return serviceRequestRepository.saveAndFlush(serviceRequests);
 		}else{
 			throw new NotFoundException("Service Request not found exception");

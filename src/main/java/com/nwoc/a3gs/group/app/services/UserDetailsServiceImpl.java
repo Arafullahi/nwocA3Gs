@@ -2,13 +2,13 @@ package com.nwoc.a3gs.group.app.services;
 
 import com.nwoc.a3gs.group.app.model.Role;
 import com.nwoc.a3gs.group.app.model.RoleName;
+import com.nwoc.a3gs.group.app.dto.ResetPasswordDTO;
 import com.nwoc.a3gs.group.app.model.User;
 import com.nwoc.a3gs.group.app.repository.RoleRepository;
 import com.nwoc.a3gs.group.app.repository.UserRepository;
 
 import javassist.NotFoundException;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -23,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
     UserRepository userRepository;
+	
+	@Autowired
+	PasswordEncoder encoder;
 
 	@Override
 	@Transactional
@@ -95,6 +99,23 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		}
 		
 	}
+	
+    public User reset(ResetPasswordDTO resetPasswordDTO) throws NotFoundException {
+		
+		Optional<User> userOpt= userRepository.findByUsername(resetPasswordDTO.getUserName());
+		if(!userOpt.isPresent()){
+			throw new NotFoundException("User not found");
+		}
+		User usr = userOpt.get();
+		String pass = resetPasswordDTO.getOldpassWord();
+			if(encoder.matches(pass, usr.getPassword())) {
+				usr.setPassword(encoder.encode(resetPasswordDTO.getNewPassword()));
+				usr= userRepository.saveAndFlush(usr);
+				return usr;
+			}else{
+				throw new NotFoundException("Old PassWord is not correct");
+			}
+		}
 
 	public List<User> findAll() {
 		return userRepository.findAll();
