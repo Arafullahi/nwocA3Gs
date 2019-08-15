@@ -70,8 +70,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		Optional<User> usrOpt =findOne(id);
 		if(usrOpt.isPresent()){
 			User usr = usrOpt.get();
-			if(user.getPassword().equals("") || user.getPassword() == null ) {
-				usr.setPassword(encoder.encode(usr.getPassword()));
+			if((user.getPassword() == "") || (user.getPassword() == null )) {
+				usr.setPassword(usr.getPassword());
 			}
 			else
 			{
@@ -82,6 +82,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			usr.setEmail(user.getEmail());
 			usr.setAge(user.getAge());
 			usr.setLocation(user.getLocation());
+			usr.setUsername(user.getUsername());
 			if(user.getRoles()!=null){
 				try{
 					Set<Role> roles= user.getRoles().stream().map(x->roleRepository.findByName(x.getName()).get()).collect(Collectors.toSet());

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nwoc.a3gs.group.app.dto.ResetPasswordDTO;
 import com.nwoc.a3gs.group.app.message.response.ResponseMessage;
 import com.jfilter.filter.FieldFilterSetting;
+import com.nwoc.a3gs.group.app.model.Role;
 import com.nwoc.a3gs.group.app.model.User;
 import com.nwoc.a3gs.group.app.services.UserDetailsServiceImpl;
 
@@ -55,12 +56,15 @@ public class UserController {
 		}
 	}
 
+	@FieldFilterSetting(className = User.class, fields = {"id", "password"})
+	@FieldFilterSetting(className = Role.class, fields = {"id"})
 	@GetMapping
 	public List<User> getAllUsers() {
 		return userService.findAll();
 	}
 
 	@FieldFilterSetting(className = User.class, fields = {"id", "password"})
+	@FieldFilterSetting(className = Role.class, fields = {"id"})
 	@GetMapping("/{id}")
 	public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long id) {
 		Optional<User> user = userService.findOne(id);
@@ -70,6 +74,8 @@ public class UserController {
 		return ResponseEntity.ok().body(user.get());
 	}
 
+	@FieldFilterSetting(className = User.class, fields = {"id", "password"})
+	@FieldFilterSetting(className = Role.class, fields = {"id"})
 	@PutMapping(value="/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long id, @Valid @RequestBody User user) {
 		User userUpdate = null;
