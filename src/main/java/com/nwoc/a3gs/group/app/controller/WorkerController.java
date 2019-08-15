@@ -61,7 +61,7 @@ public class WorkerController {
 	}
 	
 	
-	@GetMapping("/services/workers/{worker_id}")
+	@GetMapping("/services/worker/{worker_id}")
 	public ResponseEntity<?> getUserById(@PathVariable(value = "worker_id") Long worker_id) {
 		try {
 		Optional<Workers> workerOpt = workerService.findOne(worker_id);
