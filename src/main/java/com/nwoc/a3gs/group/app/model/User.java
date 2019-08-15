@@ -50,6 +50,7 @@ public class User{
     @Email
     private String email;
 
+    @JsonIgnore
     @NotBlank
     @Size(min=6, max = 100)
     private String password;
