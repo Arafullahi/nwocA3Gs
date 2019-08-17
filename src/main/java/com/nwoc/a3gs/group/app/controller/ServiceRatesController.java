@@ -3,7 +3,6 @@ package com.nwoc.a3gs.group.app.controller;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jfilter.filter.FieldFilterSetting;
 import com.nwoc.a3gs.group.app.dto.ServiceRatesDTO;
 import com.nwoc.a3gs.group.app.model.ServiceRates;
+import com.nwoc.a3gs.group.app.model.Services;
 import com.nwoc.a3gs.group.app.services.ServiceRatesServiceImpl;
 
 import javassist.NotFoundException;
@@ -48,11 +49,15 @@ public class ServiceRatesController {
 		}
 	}
 	
+	@FieldFilterSetting(className = ServiceRates.class, fields = {"rate_id"})
+	@FieldFilterSetting(className = Services.class, fields = {"id"})
 	@GetMapping("/service/rates")
 	public List<ServiceRates> getAllUsers() {
 		return serviceRatesImpl.findAll();
 	}
 
+	@FieldFilterSetting(className = ServiceRates.class, fields = {"rate_id"})
+	@FieldFilterSetting(className = Services.class, fields = {"id"})
 	@GetMapping("/service/rates/{id}")
 	public ResponseEntity<?> getUserById(@PathVariable(value = "id") Long id) {
 		Optional<ServiceRates> serviceRate = serviceRatesImpl.findOne(id);
