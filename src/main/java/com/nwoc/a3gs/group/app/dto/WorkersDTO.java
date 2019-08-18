@@ -5,6 +5,7 @@ import java.util.List;
 import com.nwoc.a3gs.group.app.model.Services;
 
 public class WorkersDTO {
+	private Long worker_id;
 	private String name;
 	private String phone;
 	private String email;
@@ -12,6 +13,13 @@ public class WorkersDTO {
 	private List<Long> serviceIds;
 	private Services services;
 	
+	
+	public Long getWorker_id() {
+		return worker_id;
+	}
+	public void setWorker_id(Long worker_id) {
+		this.worker_id = worker_id;
+	}
 	public String getName() {
 		return name;
 	}

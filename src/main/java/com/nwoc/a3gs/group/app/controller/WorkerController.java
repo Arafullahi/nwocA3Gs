@@ -39,8 +39,6 @@ public class WorkerController {
 	@PostMapping("/services/workers")
 	public ResponseEntity<?> addWorkers(@RequestBody WorkersDTO workersDTO) {
 		try {
-			//Services services = servicesService.findOne(id);
-			//workers.setServices(services);
 			Workers workers = workerService.save(workersDTO);
 			return ResponseEntity.ok(workers);
 		}
@@ -49,20 +47,12 @@ public class WorkerController {
 			System.out.println(e.getMessage());
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
-		
-		//return servicesService.findOne(id)
-		  /*.map(service -> {
-			  workers.setServices(service);
-			return workerService.save(workers);
-		}).orElseThrow(() -> new NotFoundException("sevice not found!"));*/
-		
-		
-		
+
 	}
 	
 	
 	@GetMapping("/services/worker/{worker_id}")
-	public ResponseEntity<?> getUserById(@PathVariable(value = "worker_id") Long worker_id) {
+	public ResponseEntity<?> getWorkerById(@PathVariable(value = "worker_id") Long worker_id) {
 		try {
 		Optional<Workers> workerOpt = workerService.findOne(worker_id);
 		if (!workerOpt.isPresent()) {
@@ -81,7 +71,7 @@ public class WorkerController {
 
 
 	@PutMapping("/services/workers/{worker_id}")
-	public ResponseEntity<?> updateUser(@PathVariable(value = "worker_id") Long worker_id, @RequestBody WorkersDTO workersDTO) {
+	public ResponseEntity<?> updateWorker(@PathVariable(value = "worker_id") Long worker_id, @RequestBody WorkersDTO workersDTO) {
 		try {
 		Workers workerUpdate = workerService.update(workersDTO, worker_id);
 		return ResponseEntity.ok().body(workerUpdate);
@@ -94,7 +84,7 @@ public class WorkerController {
 	}
 
 	@DeleteMapping("/services/workers/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<?> deleteWorker(@PathVariable(value = "id") Long id) {
 		try {
 		Optional<Workers> workerOpt = workerService.findOne(id);
 		if (!workerOpt.isPresent()) {

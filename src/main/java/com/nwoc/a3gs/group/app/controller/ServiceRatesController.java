@@ -21,10 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jfilter.filter.FieldFilterSetting;
 import com.nwoc.a3gs.group.app.dto.ServiceRatesDTO;
 import com.nwoc.a3gs.group.app.model.ServiceRates;
-import com.nwoc.a3gs.group.app.model.Services;
 import com.nwoc.a3gs.group.app.services.ServiceRatesServiceImpl;
 
 import javassist.NotFoundException;
@@ -49,17 +47,13 @@ public class ServiceRatesController {
 		}
 	}
 	
-	@FieldFilterSetting(className = ServiceRates.class, fields = {"rate_id"})
-	@FieldFilterSetting(className = Services.class, fields = {"id"})
 	@GetMapping("/service/rates")
-	public List<ServiceRates> getAllUsers() {
+	public List<ServiceRates> getAllServices() {
 		return serviceRatesImpl.findAll();
 	}
-
-	@FieldFilterSetting(className = ServiceRates.class, fields = {"rate_id"})
-	@FieldFilterSetting(className = Services.class, fields = {"id"})
+	
 	@GetMapping("/service/rates/{id}")
-	public ResponseEntity<?> getUserById(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<?> getServicesById(@PathVariable(value = "id") Long id) {
 		Optional<ServiceRates> serviceRate = serviceRatesImpl.findOne(id);
 		if (!serviceRate.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -69,7 +63,7 @@ public class ServiceRatesController {
 
 	
 	@PutMapping("/service/rates/{id}")
-	public ResponseEntity<?> updateUser(@PathVariable(value = "id") Long id, @RequestBody ServiceRatesDTO serviceRatesDTO) {
+	public ResponseEntity<?> updateServices(@PathVariable(value = "id") Long id, @RequestBody ServiceRatesDTO serviceRatesDTO) {
 		ServiceRates serviceRateUpdate = null;
 		try {
 			serviceRateUpdate = serviceRatesImpl.update(serviceRatesDTO, id);
@@ -81,7 +75,7 @@ public class ServiceRatesController {
 	}
 	
 	@DeleteMapping("/service/rates/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<?> deleteServices(@PathVariable(value = "id") Long id) {
 		Optional<ServiceRates> serviceRates = serviceRatesImpl.findOne(id);
 		if (!serviceRates.isPresent()) {
 			return ((BodyBuilder) ResponseEntity.notFound()).body("User Not Found");
