@@ -31,6 +31,7 @@ import com.nwoc.a3gs.group.app.model.User;
 import com.nwoc.a3gs.group.app.repository.RoleRepository;
 import com.nwoc.a3gs.group.app.repository.UserRepository;
 import com.nwoc.a3gs.group.app.security.jwt.JwtProvider;
+import com.nwoc.a3gs.group.app.services.UserDetailsServiceImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -42,6 +43,9 @@ public class AuthRestAPIs {
 
 	@Autowired
     UserRepository userRepository;
+	
+	@Autowired
+    UserDetailsServiceImpl userDetailsServiceImpl;
 
 	@Autowired
 	RoleRepository roleRepository;
@@ -84,7 +88,11 @@ public class AuthRestAPIs {
 */
 		User user = new User();
 		BeanUtils.copyProperties(signUpRequest, user);
+		String pass=signUpRequest.getPassword();
 		user.setPassword(encoder.encode(signUpRequest.getPassword()));
+		if(encoder.matches(pass, user.getPassword())){
+			System.out.println("matched");
+		}
 		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
 
@@ -110,6 +118,7 @@ public class AuthRestAPIs {
 		});
 
 		user.setRoles(roles);
+		//userDetailsServiceImpl.save(user);
 		userRepository.save(user);
 
 		return new ResponseEntity<>(new ResponseMessage("User registered successfully!"), HttpStatus.OK);
