@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -15,38 +16,39 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.NaturalId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "servicerequests")
+@EntityListeners(AuditingEntityListener.class)
 public class ServiceRequests {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	 @NotBlank
+	@NotNull
 	@OneToOne
 	@JoinColumn(name="customerId")
 	private User customer;
-	@NotBlank
+	@NotNull
 	@OneToOne
 	@JoinColumn(name="serviceId")
 	private Services service;
 	@OneToOne
 	@JoinColumn(name="workerId")
 	private Workers worker;
-	@NotBlank
+	@NotNull
 	private Float hours;
-	@NotBlank
+	@NotNull
 	private Double rate;
 	private String comment;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date date;
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
 	private Date createdAt;
@@ -102,13 +104,6 @@ public class ServiceRequests {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	public Date getDate() {
-		return date;
-	}
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	
 	public void setServiceStatus(ServiceStatus serviceStatus) {
 		this.serviceStatus = serviceStatus;
 	}

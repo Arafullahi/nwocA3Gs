@@ -3,6 +3,7 @@ package com.nwoc.a3gs.group.app.services;
 import com.nwoc.a3gs.group.app.model.Role;
 import com.nwoc.a3gs.group.app.model.RoleName;
 import com.nwoc.a3gs.group.app.dto.ResetPasswordDTO;
+import com.nwoc.a3gs.group.app.dto.UserDTO;
 import com.nwoc.a3gs.group.app.model.User;
 import com.nwoc.a3gs.group.app.repository.RoleRepository;
 import com.nwoc.a3gs.group.app.repository.UserRepository;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -51,47 +53,54 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	RoleRepository roleRepository;
 
 	@Transactional
-	public User save(User user) throws NotFoundException {
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        
-        if(user.getRoles()!=null){
+	public User save(UserDTO userDTO) throws NotFoundException {
+		userDTO.setPassword(encoder.encode(userDTO.getPassword()));
+        User usr =new User();
+        BeanUtils.copyProperties(userDTO, usr);
+        if(userDTO.getRoles()!=null){
         	try{
-        		Set<Role> roles= user.getRoles().stream().map(x->roleRepository.findByName(RoleName.ROLE_USER).get()).collect(Collectors.toSet());
-    			user.setRoles(roles);
+        		Set<Role> roles= userDTO.getRoles().stream().map(x->roleRepository.findByName(RoleName.ROLE_USER).get()).collect(Collectors.toSet());
+        		usr.setRoles(roles);
         	}catch (NoSuchElementException e) {
 				throw new NotFoundException("Role not found");
 			}
 			
 		}
-		return userRepository.save(user);
+		return userRepository.save(usr);
 	}
 	
-	public User update(User user, Long id) throws NotFoundException {
+	public User update(UserDTO userDTO, Long id) throws NotFoundException {
 		Optional<User> usrOpt =findOne(id);
 		if(usrOpt.isPresent()){
 			User usr = usrOpt.get();
-			if(user.getPassword().equals("") || user.getPassword() == null ) {
-				usr.setPassword(new BCryptPasswordEncoder().encode(usr.getPassword()));
+			if((userDTO.getPassword() == "") || (userDTO.getPassword() == null )) {
+				usr.setPassword(usr.getPassword());
 			}
 			else
 			{
-				usr.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+				usr.setPassword(encoder.encode(userDTO.getPassword()));
 			}
-			usr.setName(user.getName());
-			usr.setPhone(user.getPhone());
-			usr.setEmail(user.getEmail());
-			usr.setAge(user.getAge());
-			usr.setLocation(user.getLocation());
-			if(user.getRoles()!=null){
+			usr.setName(userDTO.getName());
+			usr.setPhone(userDTO.getPhone());
+			usr.setAge(userDTO.getAge());
+			usr.setLocation(userDTO.getLocation());
+			usr.setUsername(userDTO.getUsername());
+			if(userDTO.getRoles()!=null){
 				try{
-					Set<Role> roles= user.getRoles().stream().map(x->roleRepository.findByName(x.getName()).get()).collect(Collectors.toSet());
+					Set<Role> roles= userDTO.getRoles().stream().map(x->roleRepository.findByName(x.getName()).get()).collect(Collectors.toSet());
 					usr.setRoles(roles);
 	        	}catch (NoSuchElementException e) {
 					throw new NotFoundException("Role not found");
-				}
-				
+				}	
 			}
-			
+			if((userDTO.getEmail()).equals(usr.getEmail()) )
+			{
+				usr.setEmail(userDTO.getEmail());	
+			}
+			else
+			{
+				throw new NotFoundException("Email already enterd Cannot modify that....");
+			}
 			
 			return userRepository.saveAndFlush(usr);
 		}else{

@@ -1,11 +1,12 @@
 package com.nwoc.a3gs.group.app.dto;
 
-import java.util.Date;
+
 
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.annotations.NaturalId;
 import com.nwoc.a3gs.group.app.model.ServiceStatus;
 import com.nwoc.a3gs.group.app.model.Services;
@@ -15,19 +16,18 @@ import com.nwoc.a3gs.group.app.model.Workers;
 public class ServiceRequestsDTO {
 
 	private Long id;
-	 @NotBlank
+	 @NotNull
 	private User customer;
-	@NotBlank
+	 @NotNull
 	private Services service;
 	
 	private Workers worker;
-	@NotBlank
+	 @NotNull
 	private Float hours;
-	@NotBlank
+	 @NotNull
 	private Double rate;
 	private String comment;
 
-	private Date date;
 	
 	@Enumerated(EnumType.STRING)
 	@NaturalId
@@ -88,14 +88,6 @@ public class ServiceRequestsDTO {
 
 	public void setComment(String comment) {
 		this.comment = comment;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
 	}
 
 	public ServiceStatus getServiceStatus() {

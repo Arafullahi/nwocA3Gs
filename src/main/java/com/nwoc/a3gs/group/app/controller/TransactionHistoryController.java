@@ -114,7 +114,7 @@ public class TransactionHistoryController {
 		
 	}
 	
-	@GetMapping("/service/transactionHistorylist")
+	@GetMapping("/transaction/transactionHistorylist")
 	public ResponseEntity<Page<TransactionHistory>> listTransactionHistoryByPages(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		try {

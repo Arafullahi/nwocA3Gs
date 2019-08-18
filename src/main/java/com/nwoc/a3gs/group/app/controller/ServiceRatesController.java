@@ -3,7 +3,6 @@ package com.nwoc.a3gs.group.app.controller;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,12 +48,12 @@ public class ServiceRatesController {
 	}
 	
 	@GetMapping("/service/rates")
-	public List<ServiceRates> getAllUsers() {
+	public List<ServiceRates> getAllServices() {
 		return serviceRatesImpl.findAll();
 	}
-
+	
 	@GetMapping("/service/rates/{id}")
-	public ResponseEntity<?> getUserById(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<?> getServicesById(@PathVariable(value = "id") Long id) {
 		Optional<ServiceRates> serviceRate = serviceRatesImpl.findOne(id);
 		if (!serviceRate.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -64,7 +63,7 @@ public class ServiceRatesController {
 
 	
 	@PutMapping("/service/rates/{id}")
-	public ResponseEntity<?> updateUser(@PathVariable(value = "id") Long id, @RequestBody ServiceRatesDTO serviceRatesDTO) {
+	public ResponseEntity<?> updateServices(@PathVariable(value = "id") Long id, @RequestBody ServiceRatesDTO serviceRatesDTO) {
 		ServiceRates serviceRateUpdate = null;
 		try {
 			serviceRateUpdate = serviceRatesImpl.update(serviceRatesDTO, id);
@@ -76,7 +75,7 @@ public class ServiceRatesController {
 	}
 	
 	@DeleteMapping("/service/rates/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<?> deleteServices(@PathVariable(value = "id") Long id) {
 		Optional<ServiceRates> serviceRates = serviceRatesImpl.findOne(id);
 		if (!serviceRates.isPresent()) {
 			return ((BodyBuilder) ResponseEntity.notFound()).body("User Not Found");

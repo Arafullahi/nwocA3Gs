@@ -36,7 +36,12 @@ public class ServiceRates {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private  Long rate_id;
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	
+	@OneToMany(fetch = FetchType.LAZY,
+			 cascade = {
+				        CascadeType.PERSIST,
+				        CascadeType.MERGE
+				    })
 	@JoinTable(name = "rates_service",
 		    joinColumns = { @JoinColumn(name = "rate_id") },
 		    inverseJoinColumns = { @JoinColumn(name = "id") })
