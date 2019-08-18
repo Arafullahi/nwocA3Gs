@@ -92,7 +92,7 @@ public class UserController {
 	@PatchMapping("/resetpassword")
 	public ResponseEntity<?> PasswordReset(@Valid @RequestBody ResetPasswordDTO resetPasswordDTO){
 			try {
-				User resetpass = userService.reset(resetPasswordDTO);
+				 userService.reset(resetPasswordDTO);
 				return new ResponseEntity<>(new ResponseMessage("Password Reset Successfully Completed!"), HttpStatus.OK);
 				}
 			catch (Exception e) {
