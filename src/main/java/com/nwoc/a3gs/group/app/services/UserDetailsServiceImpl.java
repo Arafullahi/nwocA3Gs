@@ -24,7 +24,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +65,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			}
 			
 		}
+        if((userDTO.getUsername()).equals(usr.getUsername()) )
+		{
+        	throw new NotFoundException("UserName already choosed Please take another one....");
+				
+		}
+		else
+		{
+			usr.setUsername(userDTO.getUsername());	
+		}
+        
 		return userRepository.save(usr);
 	}
 	
@@ -84,7 +93,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			usr.setPhone(userDTO.getPhone());
 			usr.setAge(userDTO.getAge());
 			usr.setLocation(userDTO.getLocation());
-			usr.setUsername(userDTO.getUsername());
+			//usr.setUsername(userDTO.getUsername());
 			if(userDTO.getRoles()!=null){
 				try{
 					Set<Role> roles= userDTO.getRoles().stream().map(x->roleRepository.findByName(x.getName()).get()).collect(Collectors.toSet());
@@ -99,7 +108,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			}
 			else
 			{
-				throw new NotFoundException("Email already enterd Cannot modify that....");
+				throw new NotFoundException("Email Cannot modify....");
+			}
+			if((userDTO.getUsername()).equals(usr.getUsername()) )
+			{
+				usr.setUsername(userDTO.getUsername());	
+			}
+			else
+			{
+				throw new NotFoundException("UserName Cannot modify....");
 			}
 			
 			return userRepository.saveAndFlush(usr);

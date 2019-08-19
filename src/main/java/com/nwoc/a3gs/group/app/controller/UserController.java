@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nwoc.a3gs.group.app.dto.ResetPasswordDTO;
@@ -46,7 +47,7 @@ public class UserController {
 
 	@FieldFilterSetting(className = User.class, fields = {"id", "password"})
 	@PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userDTO) {
+	public @ResponseBody ResponseEntity<?> createUser(@RequestBody @Valid UserDTO userDTO) {
 		try {
 			userService.save(userDTO);
 			return ResponseEntity.ok("User created successfully.");

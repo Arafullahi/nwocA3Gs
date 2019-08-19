@@ -5,18 +5,32 @@ import java.util.Set;
 
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import com.nwoc.a3gs.group.app.model.Role;
 
 public class UserDTO {
 
+	@NotBlank(message = "name can't be blank")
+    @Size(min=3, max = 50)
     private String name;
+	
+	@NotBlank(message = "User name can't be blank")
+	@Size(min=3, max = 50)
     private String username;
-    @Email
-    private String email;
+	
+	 @NotBlank(message = "Email can't be blank")
+	 @Size(max = 50)
+	 @Email(message = "invalid email format")
+     private String email;
+	 
     private String password;
+	 
 	private String phone;
 	private Integer age;
+	
+	@NotBlank(message = "Location can't be blank")
 	private String location;
     private Set<Role> roles = new HashSet<>();
 	public String getName() {
