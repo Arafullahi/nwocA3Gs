@@ -15,7 +15,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.NaturalId;
@@ -49,6 +48,7 @@ public class ServiceRequests {
 	@NotNull
 	private Double rate;
 	private String comment;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
 	private Date createdAt;
@@ -61,6 +61,8 @@ public class ServiceRequests {
 	@NaturalId
 	@Column(length = 60)
 	private ServiceStatus serviceStatus;
+	
+	private String transactionId;
 	
 	public Long getId() {
 		return id;
@@ -104,6 +106,8 @@ public class ServiceRequests {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
+	
+	
 	public void setServiceStatus(ServiceStatus serviceStatus) {
 		this.serviceStatus = serviceStatus;
 	}
@@ -122,6 +126,12 @@ public class ServiceRequests {
 	public ServiceStatus getServiceStatus() {
 		return serviceStatus;
 	}
-	
+	public String getTransactionId() {
+		return transactionId;
+	}
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
 	
 }
+

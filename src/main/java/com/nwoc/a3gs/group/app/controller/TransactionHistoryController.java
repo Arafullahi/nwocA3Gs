@@ -26,8 +26,8 @@ import com.nwoc.a3gs.group.app.services.TransactionHistoryServiceImpl;
 
 import javassist.NotFoundException;
 
-@RestController
-@RequestMapping("/api")
+/*@RestController
+@RequestMapping("/api")*/
 public class TransactionHistoryController {
 	
 	@Autowired

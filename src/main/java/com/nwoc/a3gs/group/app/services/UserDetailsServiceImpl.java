@@ -1,21 +1,13 @@
 package com.nwoc.a3gs.group.app.services;
 
-import com.nwoc.a3gs.group.app.model.Role;
-import com.nwoc.a3gs.group.app.model.RoleName;
-import com.nwoc.a3gs.group.app.dto.ResetPasswordDTO;
-import com.nwoc.a3gs.group.app.dto.UserDTO;
-import com.nwoc.a3gs.group.app.model.User;
-import com.nwoc.a3gs.group.app.repository.RoleRepository;
-import com.nwoc.a3gs.group.app.repository.UserRepository;
-
-import javassist.NotFoundException;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +20,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.braintreegateway.BraintreeGateway;
+import com.braintreegateway.Customer;
+import com.braintreegateway.CustomerRequest;
+import com.braintreegateway.Result;
+import com.nwoc.a3gs.group.app.dto.ResetPasswordDTO;
+import com.nwoc.a3gs.group.app.dto.UserDTO;
+import com.nwoc.a3gs.group.app.model.Role;
+import com.nwoc.a3gs.group.app.model.RoleName;
+import com.nwoc.a3gs.group.app.model.User;
+import com.nwoc.a3gs.group.app.repository.RoleRepository;
+import com.nwoc.a3gs.group.app.repository.UserRepository;
+
+import javassist.NotFoundException;
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -36,7 +42,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	@Autowired
 	PasswordEncoder encoder;
-
+	
+	@Autowired
+	BraintreeGateway gateWay;
+	private static final Logger LOGGER = LogManager.getLogger(UserDetailsServiceImpl.class);
+	
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -74,6 +84,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		{
 			usr.setUsername(userDTO.getUsername());	
 		}
+
+        if(createCustomerInBrainTree(usr)){
+        	LOGGER.info("brain tree Customer has been create for user {}",usr.getUsername());
+        }else{
+        	LOGGER.warn("Brain tree customer creation failed for user {}",usr.getUsername());
+        	
+        }
         
 		return userRepository.save(usr);
 	}
@@ -159,5 +176,24 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		Pageable pageable = new PageRequest(pageNumber, size);
 
 		return userRepository.findAll(pageable);
+	}
+	
+	public Boolean createCustomerInBrainTree(User user){
+		try {
+			CustomerRequest request = new CustomerRequest()
+					  .firstName(user.getName())
+					  .email(user.getEmail())
+					  .phone(user.getPhone());
+					Result<Customer> result = gateWay.customer().create(request);
+
+					if(result.isSuccess()){
+						user.setBtCusId(result.getTarget().getId());
+						return true;
+					}
+		} catch (Exception e) {
+			LOGGER.error("Customer creation in brain tree failed",e);
+		}
+		
+				return false;
 	}
 }
