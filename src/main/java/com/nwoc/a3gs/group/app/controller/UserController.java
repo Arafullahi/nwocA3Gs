@@ -47,7 +47,7 @@ public class UserController {
 
 	@FieldFilterSetting(className = User.class, fields = {"id", "password"})
 	@PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ResponseEntity<?> createUser(@RequestBody @Valid UserDTO userDTO) {
+	public ResponseEntity<?> createUser(@RequestBody @Valid UserDTO userDTO) {
 		try {
 			userService.save(userDTO);
 			return ResponseEntity.ok("User created successfully.");

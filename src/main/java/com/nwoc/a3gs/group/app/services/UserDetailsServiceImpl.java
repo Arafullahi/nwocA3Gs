@@ -75,16 +75,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			}
 			
 		}
-        if((userDTO.getUsername()).equals(usr.getUsername()) )
-		{
-        	throw new NotFoundException("UserName already choosed Please take another one....");
-				
-		}
-		else
-		{
-			usr.setUsername(userDTO.getUsername());	
-		}
-
         if(createCustomerInBrainTree(usr)){
         	LOGGER.info("brain tree Customer has been create for user {}",usr.getUsername());
         }else{
