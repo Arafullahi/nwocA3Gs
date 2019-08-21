@@ -75,7 +75,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			}
 			
 		}
-
         if(createCustomerInBrainTree(usr)){
         	LOGGER.info("brain tree Customer has been create for user {}",usr.getUsername());
         }else{
@@ -101,7 +100,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			usr.setPhone(userDTO.getPhone());
 			usr.setAge(userDTO.getAge());
 			usr.setLocation(userDTO.getLocation());
-			usr.setUsername(userDTO.getUsername());
+			//usr.setUsername(userDTO.getUsername());
 			if(userDTO.getRoles()!=null){
 				try{
 					Set<Role> roles= userDTO.getRoles().stream().map(x->roleRepository.findByName(x.getName()).get()).collect(Collectors.toSet());
@@ -116,7 +115,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			}
 			else
 			{
-				throw new NotFoundException("Email already enterd Cannot modify that....");
+				throw new NotFoundException("Email Cannot modify....");
+			}
+			if((userDTO.getUsername()).equals(usr.getUsername()) )
+			{
+				usr.setUsername(userDTO.getUsername());	
+			}
+			else
+			{
+				throw new NotFoundException("UserName Cannot modify....");
 			}
 			
 			return userRepository.saveAndFlush(usr);
