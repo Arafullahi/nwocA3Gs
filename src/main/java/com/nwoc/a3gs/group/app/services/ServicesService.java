@@ -66,14 +66,15 @@ public class ServicesService {
 	}
 	
 	
-	public boolean updateService(ServicesDTO servicesDTO) throws NotFoundException {
+	public boolean updateService(ServicesDTO servicesDTO, Long serviceId) throws NotFoundException {
 		boolean isUpdated=false;
-		Optional<Services> servicesOpt = findOne(servicesDTO.getId());
+		Optional<Services> servicesOpt = findOne(serviceId);
 		if(!servicesOpt.isPresent()){
 			throw new NotFoundException("Service not found");
 		}
 		Services services=servicesOpt.get();
 		BeanUtils.copyProperties(servicesDTO, services);
+		services.setId(serviceId);
 		MultipartFile file = servicesDTO.getFile();
 		if (file != null) {
 			String filePath = fileStorageService.storeFileInAPath(file);

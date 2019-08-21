@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -36,7 +37,7 @@ public class ServiceController {
 	private static final Logger LOGGER = LogManager.getLogger(ServiceController.class);
 
 	@PostMapping("/services")
-	public ResponseEntity<ServicesDTO> createService(@ModelAttribute ServicesDTO services) {
+	public ResponseEntity<ServicesDTO> createService(@RequestBody ServicesDTO services) {
 		
 		try {
 			services = servicesService.save(services);
@@ -48,15 +49,15 @@ public class ServiceController {
 		
 	}
 	
-	@PostMapping("/services/{serviceId}")
-	public ResponseEntity<?> updateService(@PathVariable Long serviceId,  @ModelAttribute ServicesDTO services) {
-		Optional<Services> servicesOpt= servicesService.findOne(serviceId);
+	@PutMapping("/services/{serviceId}")
+	public ResponseEntity<?> updateService(@PathVariable Long serviceId,  @RequestBody ServicesDTO services) {
+		/*Optional<Services> servicesOpt= servicesService.findOne(serviceId);
 		if(!servicesOpt.isPresent()) {
 			return ResponseEntity.notFound().build();
-		}
+		}*/
 		
 		 try {
-			if(servicesService.updateService(services)){
+			if(servicesService.updateService(services, serviceId)){
 				 return new ResponseEntity<ServicesDTO>(services, HttpStatus.OK); 
 			 }else{
 				 return  ResponseEntity.badRequest().build(); 
@@ -83,7 +84,7 @@ public class ServiceController {
 	}
 	
 	@GetMapping("/services/child/{parentId}")
-	public ResponseEntity<?> findChildService(@PathVariable Long serviceId) {		
+	public ResponseEntity<?> findChildService(@PathVariable("parentId") Long serviceId) {		
 		 try {
 			 Set<Services> services= servicesService.findChildService(serviceId);
 			 return new ResponseEntity<Set<Services>>(services, HttpStatus.OK); 
