@@ -82,6 +82,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         	
         }
         
+        List<User> user =  userRepository.findAll();
+        for (User us : user) {
+        	if(us.getUsername().equals(userDTO.getUsername())) {
+        		throw new NotFoundException("User is wrog......");
+        	}
+        	else
+        	{
+        		usr.setUsername(userDTO.getUsername());
+        	}
+        	
+        }
 		return userRepository.save(usr);
 	}
 	
