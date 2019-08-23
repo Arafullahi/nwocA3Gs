@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.nwoc.a3gs.group.app.dto.ServicesDTO;
 import com.nwoc.a3gs.group.app.model.Services;
@@ -26,7 +27,7 @@ import com.nwoc.a3gs.group.app.services.ServicesService;
 
 import javassist.NotFoundException;
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Controller
+@RestController
 @RequestMapping("/api")
 public class ServiceController {
 
