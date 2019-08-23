@@ -24,7 +24,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "services")
@@ -36,6 +38,7 @@ public class Services {
 	private Long id;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parentSeviceId", nullable = true)
+	@JsonBackReference
 	private Services parentSevice;
 	@NotBlank
 	private String name;
@@ -52,6 +55,7 @@ public class Services {
 	private Date updateddAt;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parentSevice")
+	@JsonManagedReference
 	private Set<Services> childService;
 	@JsonIgnore
 	 @ManyToMany(fetch = FetchType.LAZY,
