@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jfilter.filter.FieldFilterSetting;
 import com.nwoc.a3gs.group.app.dto.ResetPasswordDTO;
 import com.nwoc.a3gs.group.app.dto.UserDTO;
 import com.nwoc.a3gs.group.app.message.response.ResponseMessage;
@@ -42,7 +43,7 @@ public class UserController {
 	UserDetailsServiceImpl userService;
 	private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
-	//@FieldFilterSetting(className = User.class, fields = {"id", "password"})
+	@FieldFilterSetting(className = User.class, fields = {"id", "password"})
 	@PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createUser(@RequestBody @Valid UserDTO userDTO) {
 		try {

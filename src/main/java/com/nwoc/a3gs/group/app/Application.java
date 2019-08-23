@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import com.jfilter.EnableJsonFilter;
 //import com.jfilter.EnableJsonFilter;
 import com.nwoc.a3gs.group.app.dto.FileStorageProperties;
 
@@ -13,8 +14,8 @@ import com.nwoc.a3gs.group.app.dto.FileStorageProperties;
 @EnableConfigurationProperties({
     FileStorageProperties.class
 })
-//@ComponentScan({"com.jfilter.components"})
-//@EnableJsonFilter
+
+@EnableJsonFilter
 public class Application {
 
 	public static void main(String[] args) {
