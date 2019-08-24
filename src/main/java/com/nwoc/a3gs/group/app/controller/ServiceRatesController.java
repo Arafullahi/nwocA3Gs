@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,7 +36,7 @@ public class ServiceRatesController {
 	ServiceRatesServiceImpl serviceRatesImpl;
 	private static final Logger LOGGER = LogManager.getLogger(ServiceRatesController.class);
 	
-	@PostMapping("/service/rates")
+	@PostMapping(value="/service/rates",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createServiceRates(@RequestBody ServiceRatesDTO serviceRatesDTO) {
 		try {
 			ServiceRates serviceRates = serviceRatesImpl.create(serviceRatesDTO);
@@ -47,12 +48,12 @@ public class ServiceRatesController {
 		}
 	}
 	
-	@GetMapping("/service/rates")
+	@GetMapping(value="/service/rates",produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<ServiceRates> getAllServices() {
 		return serviceRatesImpl.findAll();
 	}
 	
-	@GetMapping("/service/rates/{id}")
+	@GetMapping(value="/service/rates/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getServicesById(@PathVariable(value = "id") Long id) {
 		Optional<ServiceRates> serviceRate = serviceRatesImpl.findOne(id);
 		if (!serviceRate.isPresent()) {
@@ -62,7 +63,7 @@ public class ServiceRatesController {
 	}
 
 	
-	@PutMapping("/service/rates/{id}")
+	@PutMapping(value="/service/rates/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateServices(@PathVariable(value = "id") Long id, @RequestBody ServiceRatesDTO serviceRatesDTO) {
 		ServiceRates serviceRateUpdate = null;
 		try {
@@ -74,7 +75,7 @@ public class ServiceRatesController {
 		return ResponseEntity.ok().body(serviceRateUpdate);
 	}
 	
-	@DeleteMapping("/service/rates/{id}")
+	@DeleteMapping(value="/service/rates/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> deleteServices(@PathVariable(value = "id") Long id) {
 		Optional<ServiceRates> serviceRates = serviceRatesImpl.findOne(id);
 		if (!serviceRates.isPresent()) {
@@ -85,7 +86,7 @@ public class ServiceRatesController {
 		return ResponseEntity.ok().body(serviceRates.get().getRate() + "  Successfully Deleted");
 	}
 	
-	@GetMapping("/service/rateslist")
+	@GetMapping(value="/service/rateslist",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Page<ServiceRates>> listServiceRatesByPages(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		try {

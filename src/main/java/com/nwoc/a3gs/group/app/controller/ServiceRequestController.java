@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,7 +47,7 @@ public class ServiceRequestController {
 
 	private static final Logger LOGGER = LogManager.getLogger(ServiceRatesController.class);
 	
-	@PostMapping("/service/request")
+	@PostMapping(value="/service/request",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createServiceRates(@Valid @RequestBody ServiceRequestsDTO serviceRatesDTO) {
 		try {
 			serviceRequestService.create(serviceRatesDTO);
@@ -63,7 +64,7 @@ public class ServiceRequestController {
 		return serviceRequestService.findAll();
 	}
 
-	@GetMapping("/service/requests/{id}")
+	@GetMapping(value="/service/requests/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getServiceRequestById(@PathVariable(value = "id") Long id) {
 		Optional<ServiceRequests> serviceRequests = serviceRequestService.findOne(id);
 		if (!serviceRequests.isPresent()) {
@@ -74,7 +75,7 @@ public class ServiceRequestController {
 	
 	
 
-	@PutMapping("/service/request/{id}")
+	@PutMapping(value="/service/request/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateUser(@PathVariable(value = "id") Long id, @RequestBody ServiceRequestsDTO serviceRequestsDTO) {
 		ServiceRequests serviceRequests = null;
 		try {
@@ -97,7 +98,7 @@ public class ServiceRequestController {
 		return ResponseEntity.ok().body( "  Successfully Deleted");
 	}*/
 	
-	@GetMapping("/service/requestlist")
+	@GetMapping(value="/service/requestlist",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Page<ServiceRequests>> findServiceRequestByPages(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		try {
@@ -109,7 +110,7 @@ public class ServiceRequestController {
 		}
 	}
 	
-	@GetMapping("/service/requestlist/completed")
+	@GetMapping(value="/service/requestlist/completed",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Page<ServiceRequests>> findCompletedServiceRequestByPages(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		try {
@@ -121,7 +122,7 @@ public class ServiceRequestController {
 		}
 	}
 	
-	@GetMapping("/service/requestlist/amountpaid")
+	@GetMapping(value="/service/requestlist/amountpaid",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Page<ServiceRequests>> findPaidServiceRequestByPages(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		try {
@@ -133,7 +134,7 @@ public class ServiceRequestController {
 		}
 	}
 	
-	@GetMapping("/service/requestlist/amountnotpaid")
+	@GetMapping(value="/service/requestlist/amountnotpaid",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Page<ServiceRequests>> findNotPaidServiceRequestByPages(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		try {
@@ -144,7 +145,7 @@ public class ServiceRequestController {
 		}
 	}
 	
-	@GetMapping("/service/request/{username}")
+	@GetMapping(value="/service/request/{username}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<ServiceRequests>> listServiceRequestsByUsername(@PathVariable(value = "username") String username) {
 		try {
 
@@ -155,7 +156,7 @@ public class ServiceRequestController {
 		}
 	}
 	
-	@GetMapping("/service/request/{serviceRequId}/assign/{workerId}")
+	@GetMapping(value="/service/request/{serviceRequId}/assign/{workerId}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> assignServiceToWorker(@PathVariable Long serviceRequestId,
 			@PathVariable Long workerId) {
 		try {

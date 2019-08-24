@@ -48,7 +48,7 @@ public class ServiceController {
 		
 	}
 	
-	@PutMapping("/services/{serviceId}")
+	@PutMapping(value="/services/{serviceId}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateService(@PathVariable Long serviceId,  @RequestBody ServicesDTO services) {
 		/*Optional<Services> servicesOpt= servicesService.findOne(serviceId);
 		if(!servicesOpt.isPresent()) {
@@ -69,7 +69,7 @@ public class ServiceController {
 		
 	}
 	
-	@GetMapping("/services/main")
+	@GetMapping(value="/services/main",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> mainServices() {		
 		 try {
 			 List<Services> services= servicesService.findMainService();
@@ -82,7 +82,7 @@ public class ServiceController {
 		
 	}
 	
-	@GetMapping("/services/child/{parentId}")
+	@GetMapping(value="/services/child/{parentId}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> findChildService(@PathVariable("parentId") Long serviceId) {		
 		 try {
 			 Set<Services> services= servicesService.findChildService(serviceId);
@@ -96,7 +96,7 @@ public class ServiceController {
 	}
 	
 	
-	@GetMapping("/service/list")
+	@GetMapping(value="/service/list",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Page<Services>> listServicesByPages(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		try {

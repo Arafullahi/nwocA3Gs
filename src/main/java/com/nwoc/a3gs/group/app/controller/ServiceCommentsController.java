@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,7 +35,7 @@ public class ServiceCommentsController {
 	ServiceCommentsServiceImpl serviceCommentsServiceImpl;
 	private static final Logger LOGGER = LogManager.getLogger(ServiceCommentsController.class);
 	
-	@PostMapping("/service/comment")
+	@PostMapping(value="/service/comment",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createServiceComment(@RequestBody ServiceCommentsDTO serviceCommentsDTO) {
 		try {
 			ServiceComments serviceComments = serviceCommentsServiceImpl.create(serviceCommentsDTO);
@@ -47,7 +48,7 @@ public class ServiceCommentsController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@GetMapping("/service/comment")
+	@GetMapping(value="/service/comment",produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<ServiceComments> getAllComment() {
 		try {
 			return serviceCommentsServiceImpl.findAll();
@@ -61,7 +62,7 @@ public class ServiceCommentsController {
 		
 	}
 
-	@GetMapping("/service/comment/{id}")
+	@GetMapping(value="/service/comment/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getCommentById(@PathVariable(value = "id") Long id) {
 		try {
 			Optional<ServiceComments> serviceComments = serviceCommentsServiceImpl.findOne(id);
@@ -80,7 +81,7 @@ public class ServiceCommentsController {
 	}
 
 	
-	@PutMapping("/service/comment/{id}")
+	@PutMapping(value="/service/comment/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateServiceComment(@PathVariable(value = "id") Long id, @RequestBody ServiceCommentsDTO serviceCommentsDTO) {
 		ServiceComments serviceComments = null;
 		try {
@@ -92,7 +93,7 @@ public class ServiceCommentsController {
 		return ResponseEntity.ok().body(serviceComments);
 	}
 	
-	@DeleteMapping("/service/comment/{id}")
+	@DeleteMapping(value="/service/comment/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> deleteServiceComment(@PathVariable(value = "id") Long id) {
 		try {
 			
@@ -114,7 +115,7 @@ public class ServiceCommentsController {
 		
 	}
 	
-	@GetMapping("/service/commentList")
+	@GetMapping(value="/service/commentList",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Page<ServiceComments>> listServiceCommentByPages(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		try {

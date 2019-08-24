@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,7 +35,7 @@ public class TransactionHistoryController {
 	TransactionHistoryServiceImpl transactionHistoryServiceImpl;
 	private static final Logger LOGGER = LogManager.getLogger(ServiceHistoryController.class);
 	
-	@PostMapping("/transaction/history")
+	@PostMapping(value="/transaction/history",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createTransactionHistory(@RequestBody TransactionHistoryDTO transactionHistoryDTO) {
 		try {
 			TransactionHistory transactionHistory = transactionHistoryServiceImpl.create(transactionHistoryDTO);
@@ -47,7 +48,7 @@ public class TransactionHistoryController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@GetMapping("/transaction/history")
+	@GetMapping(value="/transaction/history",produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<TransactionHistory> getAllTransationHistory() {
 		try {
 			return transactionHistoryServiceImpl.findAll();
@@ -61,7 +62,7 @@ public class TransactionHistoryController {
 		
 	}
 
-	@GetMapping("/transaction/history/{id}")
+	@GetMapping(value="/transaction/history/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getTransactionHistoryById(@PathVariable(value = "id") Long id) {
 		try {
 			Optional<TransactionHistory> transctionHistory = transactionHistoryServiceImpl.findOne(id);
@@ -80,7 +81,7 @@ public class TransactionHistoryController {
 	}
 
 	
-	@PutMapping("/transaction/history/{id}")
+	@PutMapping(value="/transaction/history/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateTransactionHistory(@PathVariable(value = "id") Long id, @RequestBody TransactionHistoryDTO transactionHistoryDTO) {
 		TransactionHistory transactionHistory = null;
 		try {
@@ -92,7 +93,7 @@ public class TransactionHistoryController {
 		return ResponseEntity.ok().body(transactionHistory);
 	}
 	
-	@DeleteMapping("/transaction/history/{id}")
+	@DeleteMapping(value="/transaction/history/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> deleteTransactionHistory(@PathVariable(value = "id") Long id) {
 		try {
 			
@@ -114,7 +115,7 @@ public class TransactionHistoryController {
 		
 	}
 	
-	@GetMapping("/transaction/transactionHistorylist")
+	@GetMapping(value="/transaction/transactionHistorylist",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Page<TransactionHistory>> listTransactionHistoryByPages(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		try {

@@ -88,7 +88,7 @@ public class UserController {
 		return ResponseEntity.ok().body(userUpdate);
 	}
 	
-	@PatchMapping("/resetpassword")
+	@PatchMapping(value="/resetpassword",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> PasswordReset(@Valid @RequestBody ResetPasswordDTO resetPasswordDTO){
 			try {
 				 userService.reset(resetPasswordDTO);
@@ -101,7 +101,7 @@ public class UserController {
 			}
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping(value="/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> deleteUser(@PathVariable(value = "id") Long id) {
 		Optional<User> user = userService.findOne(id);
 		if (!user.isPresent()) {
@@ -113,7 +113,7 @@ public class UserController {
 		return ResponseEntity.ok().body(user.get().getName() + "  Successfully Deleted");
 	}
 
-	@GetMapping("/userslist")
+	@GetMapping(value="/userslist",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Page<User>> listUserByPages(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		try {
