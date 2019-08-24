@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,7 +35,7 @@ public class WorkerRatesController {
 	WorkerRatesServiceImpl workerRatesImpl;
 	private static final Logger LOGGER = LogManager.getLogger(WorkerRatesController.class);
 
-	@PostMapping("/worker/rates")
+	@PostMapping(value="/worker/rates",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createWorkerRates(@RequestBody WorkerRatesDTO workerRatesDTO) {
 		try {
 			 WorkerRates workerRates = workerRatesImpl.create(workerRatesDTO);
@@ -47,7 +48,7 @@ public class WorkerRatesController {
 	}
 
 	@SuppressWarnings("unchecked")
-	@GetMapping("/worker/rates")
+	@GetMapping(value="/worker/rates",produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<WorkerRates> getAllUsers() {
 		try {
 			return workerRatesImpl.findAll();
@@ -60,7 +61,7 @@ public class WorkerRatesController {
 		
 	}
 
-	@GetMapping("/worker/rates/{id}")
+	@GetMapping(value="/worker/rates/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getWorkerRateById(@PathVariable(value = "id") Long id) {
 		try {
 			Optional<WorkerRates> workerRate = workerRatesImpl.findOne(id);
@@ -80,7 +81,7 @@ public class WorkerRatesController {
 	}
 
 
-	@PutMapping("/worker/rates/{id}")
+	@PutMapping(value="/worker/rates/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateWorkerRates(@PathVariable(value = "id") Long id, @RequestBody WorkerRatesDTO workerRatesDTO) {
 		WorkerRates workerRateUpdate = null;
 		try {
@@ -92,7 +93,7 @@ public class WorkerRatesController {
 		return ResponseEntity.ok().body(workerRateUpdate);
 	}
 
-	@DeleteMapping("/worker/rates/{id}")
+	@DeleteMapping(value="/worker/rates/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> deleteWorkerRates(@PathVariable(value = "id") Long id) {
 		try {
 			Optional<WorkerRates> workerRates = workerRatesImpl.findOne(id);
@@ -113,7 +114,7 @@ public class WorkerRatesController {
 		
 	}
 
-	@GetMapping("/worker/rates/workerRatelist")
+	@GetMapping(value="/worker/rates/workerRatelist",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Page<WorkerRates>> listWorkerServiceRatesByPages(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		try {

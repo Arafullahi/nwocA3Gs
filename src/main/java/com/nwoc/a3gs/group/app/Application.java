@@ -15,7 +15,8 @@ import com.nwoc.a3gs.group.app.dto.FileStorageProperties;
     FileStorageProperties.class
 })
 
-@EnableJsonFilter
+
+@EnableJsonFilter()
 public class Application {
 
 	public static void main(String[] args) {

@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,7 +35,7 @@ public class ServiceHistoryController {
 	ServiceHistoryServiceImpl serviceHistoryServiceImpl;
 	private static final Logger LOGGER = LogManager.getLogger(ServiceHistoryController.class);
 	
-	@PostMapping("/service/history")
+	@PostMapping(value="/service/history",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createServiceHistory(@RequestBody ServiceHistoryDTO serviceHistoryDTO) {
 		try {
 			ServiceHistory serviceHistory = serviceHistoryServiceImpl.create(serviceHistoryDTO);
@@ -47,7 +48,7 @@ public class ServiceHistoryController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@GetMapping("/service/history")
+	@GetMapping(value="/service/history",produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<ServiceHistory> getAllHistory() {
 		try {
 			return serviceHistoryServiceImpl.findAll();
@@ -61,7 +62,7 @@ public class ServiceHistoryController {
 		
 	}
 
-	@GetMapping("/service/history/{id}")
+	@GetMapping(value="/service/history/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getHistoryById(@PathVariable(value = "id") Long id) {
 		try {
 			Optional<ServiceHistory> serviceHistory = serviceHistoryServiceImpl.findOne(id);
@@ -81,7 +82,7 @@ public class ServiceHistoryController {
 	}
 
 	
-	@PutMapping("/service/history/{id}")
+	@PutMapping(value="/service/history/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateServiceHistory(@PathVariable(value = "id") Long id, @RequestBody ServiceHistoryDTO ServiceHistoryDTO) {
 		ServiceHistory serviceHistory = null;
 		try {
@@ -93,7 +94,7 @@ public class ServiceHistoryController {
 		return ResponseEntity.ok().body(serviceHistory);
 	}
 	
-	@DeleteMapping("/service/history/{id}")
+	@DeleteMapping(value="/service/history/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> deleteServiceHistory(@PathVariable(value = "id") Long id) {
 		try {
 			
@@ -115,7 +116,7 @@ public class ServiceHistoryController {
 		
 	}
 	
-	@GetMapping("/service/historylist")
+	@GetMapping(value="/service/historylist",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Page<ServiceHistory>> listServiceHistoryByPages(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		try {
