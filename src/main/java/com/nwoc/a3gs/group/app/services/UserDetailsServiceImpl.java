@@ -26,6 +26,7 @@ import com.braintreegateway.CustomerRequest;
 import com.braintreegateway.Result;
 import com.nwoc.a3gs.group.app.dto.ResetPasswordDTO;
 import com.nwoc.a3gs.group.app.dto.UserDTO;
+import com.nwoc.a3gs.group.app.exceptions.UserNameUsedException;
 import com.nwoc.a3gs.group.app.model.Role;
 import com.nwoc.a3gs.group.app.model.RoleName;
 import com.nwoc.a3gs.group.app.model.User;
@@ -62,7 +63,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	RoleRepository roleRepository;
 
 	@Transactional
-	public User save(UserDTO userDTO) throws NotFoundException {
+	public User save(UserDTO userDTO) throws NotFoundException, UserNameUsedException {
 		userDTO.setPassword(encoder.encode(userDTO.getPassword()));
         User usr =new User();
         BeanUtils.copyProperties(userDTO, usr);
@@ -82,17 +83,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         	
         }
         
-        List<User> user =  userRepository.findAll();
-        for (User us : user) {
-        	if(us.getUsername().equals(userDTO.getUsername())) {
-        		throw new NotFoundException("User is wrog......");
-        	}
-        	else
-        	{
-        		usr.setUsername(userDTO.getUsername());
-        	}
-        	
+        Optional<User> userOpt =userRepository.findByUsername(userDTO.getUsername());
+        if(userOpt.isPresent()){
+        	throw new UserNameUsedException("username already in use");
         }
+        
 		return userRepository.save(usr);
 	}
 	
