@@ -43,6 +43,12 @@ public class ServiceRequests {
 	@OneToOne
 	@JoinColumn(name="workerId")
 	private Workers worker;
+	private  String fullName;
+	private  String phone;
+	private  String email;
+	private  String address;
+	private Date requestDate;
+	private String pickTime;
 	@NotNull
 	private Float hours;
 	@NotNull
@@ -132,6 +138,53 @@ public class ServiceRequests {
 	public void setTransactionId(String transactionId) {
 		this.transactionId = transactionId;
 	}
-	
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Date getRequestDate() {
+		return requestDate;
+	}
+
+	public void setRequestDate(Date requestDate) {
+		this.requestDate = requestDate;
+	}
+
+	public String getPickTime() {
+		return pickTime;
+	}
+
+	public void setPickTime(String pickTime) {
+		this.pickTime = pickTime;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 }
 

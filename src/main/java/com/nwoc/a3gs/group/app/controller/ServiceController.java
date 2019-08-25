@@ -81,6 +81,19 @@ public class ServiceController {
 		}
 		
 	}
+
+	@GetMapping(value="/services/{serviceId}",produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> findByServiceId(@PathVariable Long serviceId) {
+		try {
+			ServicesDTO servicesDTO= servicesService.findById(serviceId);
+			return new ResponseEntity<ServicesDTO>(servicesDTO, HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(),e);
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+
+		}
+
+	}
 	
 	@GetMapping(value="/services/child/{parentId}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> findChildService(@PathVariable("parentId") Long serviceId) {		

@@ -36,7 +36,7 @@ import javassist.NotFoundException;
 
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(value = "/api/users",produces=MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
 	@Autowired
@@ -58,14 +58,14 @@ public class UserController {
 
 	//@FieldFilterSetting(className = User.class, fields = {"id", "password"})
 	//@FieldFilterSetting(className = Role.class, fields = {"id"})
-	@GetMapping
+	@GetMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<User> getAllUsers() {
 		return userService.findAll();
 	}
 
 	//@FieldFilterSetting(className = User.class, fields = {"id", "password"})
 	//@FieldFilterSetting(className = Role.class, fields = {"id"})
-	@GetMapping("/{id}")
+	@GetMapping(value = "/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long id) {
 		Optional<User> user = userService.findOne(id);
 		if (!user.isPresent()) {
