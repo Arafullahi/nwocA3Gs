@@ -76,7 +76,7 @@ public class ServiceRequestController {
 	
 
 	@PutMapping(value="/service/request/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> updateUser(@PathVariable(value = "id") Long id, @RequestBody ServiceRequestsDTO serviceRequestsDTO) {
+	public ResponseEntity<?> updateServiceRequest(@PathVariable(value = "id") Long id, @RequestBody ServiceRequestsDTO serviceRequestsDTO) {
 		ServiceRequests serviceRequests = null;
 		try {
 			serviceRequests = serviceRequestService.update(serviceRequestsDTO, id);

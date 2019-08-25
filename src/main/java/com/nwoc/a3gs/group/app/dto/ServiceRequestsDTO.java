@@ -13,6 +13,8 @@ import com.nwoc.a3gs.group.app.model.Services;
 import com.nwoc.a3gs.group.app.model.User;
 import com.nwoc.a3gs.group.app.model.Workers;
 
+import java.util.Date;
+
 public class ServiceRequestsDTO {
 
 	private Long id;
@@ -27,7 +29,12 @@ public class ServiceRequestsDTO {
 	 @NotNull
 	private Double rate;
 	private String comment;
-
+	private  String fullName;
+	private  String phone;
+	private  String email;
+	private  String address;
+	private Date requestDate;
+	private String pickTime;
 	
 	@Enumerated(EnumType.STRING)
 	@NaturalId
@@ -97,5 +104,52 @@ public class ServiceRequestsDTO {
 	public void setServiceStatus(ServiceStatus serviceStatus) {
 		this.serviceStatus = serviceStatus;
 	}
-	
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Date getRequestDate() {
+		return requestDate;
+	}
+
+	public void setRequestDate(Date requestDate) {
+		this.requestDate = requestDate;
+	}
+
+	public String getPickTime() {
+		return pickTime;
+	}
+
+	public void setPickTime(String pickTime) {
+		this.pickTime = pickTime;
+	}
 }
