@@ -40,10 +40,6 @@ import javassist.NotFoundException;
 @RequestMapping(value = "/api/users",produces=MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
-	
-	@Autowired
-	MailServiceImpl mailServiceImpl;
-
 	@Autowired
 	UserDetailsServiceImpl userService;
 	private static final Logger LOGGER = LogManager.getLogger(UserController.class);
@@ -52,8 +48,7 @@ public class UserController {
 	@PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createUser(@RequestBody @Valid UserDTO userDTO) {
 		try {
-			if(userService.save(userDTO) != null) {
-				mailServiceImpl.sendMail(userDTO);
+			if(userService.save(userDTO)) {		
 				return ResponseEntity.ok("User created successfully.");	
 			}
               else {

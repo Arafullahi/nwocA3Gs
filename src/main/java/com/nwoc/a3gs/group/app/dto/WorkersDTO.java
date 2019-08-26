@@ -11,7 +11,6 @@ public class WorkersDTO {
 	private String email;
 	private String location;
 	private List<Long> serviceIds;
-	private Services services;
 	
 	
 	public Long getWorker_id() {
@@ -43,12 +42,6 @@ public class WorkersDTO {
 	}
 	public void setLocation(String location) {
 		this.location = location;
-	}
-	public Services getServices() {
-		return services;
-	}
-	public void setServices(Services services) {
-		this.services = services;
 	}
 	public List<Long> getServiceIds() {
 		return serviceIds;
