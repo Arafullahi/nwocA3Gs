@@ -29,6 +29,7 @@ import com.nwoc.a3gs.group.app.dto.ResetPasswordDTO;
 import com.nwoc.a3gs.group.app.dto.UserDTO;
 import com.nwoc.a3gs.group.app.message.response.ResponseMessage;
 import com.nwoc.a3gs.group.app.model.User;
+import com.nwoc.a3gs.group.app.services.MailServiceImpl;
 import com.nwoc.a3gs.group.app.services.UserDetailsServiceImpl;
 
 import javassist.NotFoundException;
@@ -42,13 +43,18 @@ public class UserController {
 	@Autowired
 	UserDetailsServiceImpl userService;
 	private static final Logger LOGGER = LogManager.getLogger(UserController.class);
-
+	
 	@FieldFilterSetting(className = User.class, fields = {"id", "password"})
 	@PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createUser(@RequestBody @Valid UserDTO userDTO) {
 		try {
-			userService.save(userDTO);
-			return ResponseEntity.ok("User created successfully.");
+			if(userService.save(userDTO)) {		
+				return ResponseEntity.ok("User created successfully.");	
+			}
+              else {
+            	  return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User Registration Failed.");
+			}
+			
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			System.out.println(e.getMessage());

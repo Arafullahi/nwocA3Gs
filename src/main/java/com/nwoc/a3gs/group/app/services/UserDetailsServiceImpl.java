@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,12 @@ import javassist.NotFoundException;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+	
+	@Autowired
+	private Environment env;
+	
+	@Autowired
+	MailServiceImpl mailServiceImpl;
 
 	@Autowired
     UserRepository userRepository;
@@ -63,7 +70,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	RoleRepository roleRepository;
 
 	@Transactional
-	public User save(UserDTO userDTO) throws NotFoundException, UserNameUsedException {
+	public boolean save(UserDTO userDTO) throws NotFoundException, UserNameUsedException {
+		
+		String enabled = env.getProperty("user.mail.enabled"); 
+		int active = Integer.parseInt(enabled);
+		boolean isSave = false;
 		userDTO.setPassword(encoder.encode(userDTO.getPassword()));
         User usr =new User();
         BeanUtils.copyProperties(userDTO, usr);
@@ -88,8 +99,24 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         	throw new UserNameUsedException("username already in use");
         }
         
-		return userRepository.save(usr);
-	}
+		 if( userRepository.save(usr) != null) {
+			 isSave = true;
+			 if(active == 1) {
+			 mailServiceImpl.sendMail(userDTO);
+			 LOGGER.info("Mail Sended to User");
+			 }
+			 else
+			 {
+				 LOGGER.info("Mail Functionality disabled");
+			 }
+			 return isSave;
+		 }
+		 else {
+			 LOGGER.error("Customer creation in brain tree failed");
+			 return isSave;
+		 }
+			 
+		 }
 	
 	public User update(UserDTO userDTO, Long id) throws NotFoundException {
 		Optional<User> usrOpt =findOne(id);
