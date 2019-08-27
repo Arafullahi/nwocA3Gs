@@ -51,7 +51,6 @@ public class ServiceRequests {
 	private String pickTime;
 	@NotNull
 	private Float hours;
-	@NotNull
 	private Double rate;
 	private String comment;
 

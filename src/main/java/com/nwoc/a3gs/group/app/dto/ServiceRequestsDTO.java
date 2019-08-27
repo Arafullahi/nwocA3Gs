@@ -26,7 +26,6 @@ public class ServiceRequestsDTO {
 	private Workers worker;
 	 @NotNull
 	private Float hours;
-	 @NotNull
 	private Double rate;
 	private String comment;
 	private  String fullName;
