@@ -2,10 +2,11 @@ package com.nwoc.a3gs.group.app.dto;
 
 import java.util.List;
 
-import com.nwoc.a3gs.group.app.model.Services;
+import com.fasterxml.jackson.annotation.JsonAlias;
 
 public class WorkersDTO {
-	private Long worker_id;
+	@JsonAlias("worker_id")
+	private Long workerId;
 	private String name;
 	private String phone;
 	private String email;
@@ -13,11 +14,11 @@ public class WorkersDTO {
 	private List<Long> serviceIds;
 	
 	
-	public Long getWorker_id() {
-		return worker_id;
+	public Long getWorkerId() {
+		return workerId;
 	}
-	public void setWorker_id(Long worker_id) {
-		this.worker_id = worker_id;
+	public void setWorkerId(Long workerId) {
+		this.workerId = workerId;
 	}
 	public String getName() {
 		return name;

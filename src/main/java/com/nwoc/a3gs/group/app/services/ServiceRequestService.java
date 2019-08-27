@@ -5,13 +5,11 @@ import java.util.Optional;
 
 import com.nwoc.a3gs.group.app.model.*;
 import com.nwoc.a3gs.group.app.repository.*;
-import javafx.concurrent.Worker;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.nwoc.a3gs.group.app.dto.ServiceRequestsDTO;
@@ -48,13 +46,13 @@ public class ServiceRequestService {
 			throw new NotFoundException("User not found");
 		}
 
-		if(serviceRequestsDTO.getWorker()!=null && serviceRequestsDTO.getWorker().getWorker_id()!=null){
-			Long workerId=serviceRequestsDTO.getWorker().getWorker_id();
+		if(serviceRequestsDTO.getWorker()!=null && serviceRequestsDTO.getWorker().getWorkerId()!=null){
+			Long workerId=serviceRequestsDTO.getWorker().getWorkerId();
 			Optional<Workers> worker= workerRepository.findById(workerId);
 			if(!worker.isPresent()){
 				throw new NotFoundException("Worker Not found");
 			}
-			Optional<WorkerRates> workerRates = workerRatesRepository.findByServices_IdAndWorkers_Id(serviceRequestsDTO.getService().getId(),workerId);
+			Optional<WorkerRates> workerRates = workerRatesRepository.findByServices_IdAndWorkers_WorkerId(serviceRequestsDTO.getService().getId(),workerId);
 			if(workerRates.isPresent()){
 				serviceRequests.setRate(workerRates.get().getRate()*serviceRequests.getHours());
 			}
