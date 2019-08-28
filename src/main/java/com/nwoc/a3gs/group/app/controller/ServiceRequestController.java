@@ -48,10 +48,10 @@ public class ServiceRequestController {
 	private static final Logger LOGGER = LogManager.getLogger(ServiceRatesController.class);
 	
 	@PostMapping(value="/service/request",produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> createServiceRates(@Valid @RequestBody ServiceRequestsDTO serviceRatesDTO) {
+	public ResponseEntity<?> createServiceRates(@Valid @RequestBody ServiceRequestsDTO serviceRequestDto) {
 		try {
-			serviceRequestService.create(serviceRatesDTO);
-			return ResponseEntity.ok("Service request created successfully.");
+			ServiceRequests serviceRequests= serviceRequestService.create(serviceRequestDto);
+			return ResponseEntity.ok(serviceRequests);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			
