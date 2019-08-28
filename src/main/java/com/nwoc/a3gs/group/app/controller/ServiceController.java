@@ -121,6 +121,68 @@ public class ServiceController {
 		}
 	}
 	
-	
-	
+	@GetMapping(value = "/search",produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getSearchService(@RequestParam("name") String name, @RequestParam("id") Long id) {
+		
+		if((!name.equals("") && !name.isEmpty()) && (id != null) )
+		{
+		try {
+			List<Services> service = servicesService.findMainServicesAndName(name, id);
+			if(!service.isEmpty()) {
+				return ResponseEntity.ok().body(service);
+			}
+			else
+			{
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Record Not Found");
+			}
+			
+		}
+		catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		}
+
+		}
+		else if((!name.equals("") && !name.isEmpty()) && (id == null))
+		{
+			try {
+			List<Services> service = servicesService.findMainServiceName(name);
+			if(!service.isEmpty())  {
+				return ResponseEntity.ok().body(service);
+			}
+			else
+			{
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Record Not Found");
+			}
+			}
+			catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				e.printStackTrace();
+				return ResponseEntity.status(HttpStatus.CONFLICT).build();
+			}
+			
+		}
+		
+		else if((name.equals("") && name.isEmpty()) && (id != null)) 
+		{
+			try {
+			List<Services> service = servicesService.findMainServiceById(id);
+			if(!service.isEmpty()) {
+				return ResponseEntity.ok().body(service);
+			}
+			else
+			{
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Record Not Found");
+			}
+			}
+		catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+			
+		}
+}
+		return ResponseEntity.ok().body(null);
+}
 }

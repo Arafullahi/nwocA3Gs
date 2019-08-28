@@ -106,5 +106,20 @@ public class ServicesService {
 
 		return servicesRepository.findAll(pageable);
 	}
+	
+	public List<Services> findMainServicesAndName(String name, Long id) {
+		return servicesRepository.findMainServicesAndName(name, id);
+		
+	}
+	
+	public List<Services> findMainServiceName(String name) {
+		return servicesRepository.findMainServiceName(name);
+		
+	}
+	
+	public List<Services> findMainServiceById(Long id) {
+		return servicesRepository.findMainServiceById(id);
+		
+	} 
 
 }
