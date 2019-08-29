@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.nwoc.a3gs.group.app.dto.WorkersDTO;
 import com.nwoc.a3gs.group.app.model.Services;
@@ -22,6 +23,9 @@ import javassist.NotFoundException;
 
 @Service
 public class WorkerService {
+	
+	@Autowired
+	private FileStorageService fileStorageService;
 	
 	@Autowired
 	private WorkerRepository workerRepository;
@@ -35,6 +39,12 @@ public class WorkerService {
 		BeanUtils.copyProperties(workersDTO, workers);
 		List<Services> services= workersDTO.getServiceIds().stream().map(x->servicesService.findOne(x).get()).collect(Collectors.toList());
 		workers.setServices(services);
+		MultipartFile file = workersDTO.getFile();
+		if (file != null) {
+			String filePath = fileStorageService.storeFileInAPath(file);
+			workers.setImages(filePath);
+			workersDTO.setFile(null);
+		}
 		return workerRepository.save(workers);
 	}
 
@@ -57,6 +67,12 @@ public class WorkerService {
 		List<Services> services= workersDTO.getServiceIds().stream().map(x->servicesService.findOne(x).get()).collect(Collectors.toList());
 		wrker.setServices(services);
 		BeanUtils.copyProperties(workersDTO, wrker);
+		MultipartFile file = workersDTO.getFile();
+		if (file != null) {
+			String filePath = fileStorageService.storeFileInAPath(file);
+			wrker.setImages(filePath);
+			workersDTO.setFile(null);
+		}
 		return workerRepository.save(wrker);
 	}
 

@@ -3,6 +3,9 @@ package com.nwoc.a3gs.group.app.dto;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import org.springframework.web.multipart.MultipartFile;
+
+
 
 public class WorkersDTO {
 	@JsonAlias("worker_id")
@@ -11,6 +14,7 @@ public class WorkersDTO {
 	private String phone;
 	private String email;
 	private String location;
+	private MultipartFile file;
 	private List<Long> serviceIds;
 	
 	
@@ -43,6 +47,12 @@ public class WorkersDTO {
 	}
 	public void setLocation(String location) {
 		this.location = location;
+	}
+	public MultipartFile getFile() {
+		return file;
+	}
+	public void setFile(MultipartFile file) {
+		this.file = file;
 	}
 	public List<Long> getServiceIds() {
 		return serviceIds;
