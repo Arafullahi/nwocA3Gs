@@ -37,7 +37,9 @@ public class WorkerService {
 	public Workers save(WorkersDTO workersDTO) {
 		Workers workers= new Workers();
 		BeanUtils.copyProperties(workersDTO, workers);
-		List<Services> services= workersDTO.getServiceIds().stream().map(x->servicesService.findOne(x).get()).collect(Collectors.toList());
+		List<Services> services=null;
+		if(workersDTO.getServiceIds()!=null)
+			services= workersDTO.getServiceIds().stream().map(x->servicesService.findOne(x).get()).collect(Collectors.toList());
 		workers.setServices(services);
 		MultipartFile file = workersDTO.getFile();
 		if (file != null) {

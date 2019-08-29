@@ -37,7 +37,7 @@ public class FileController {
 	@Autowired
 	private FileStorageService fileStorageService;
 
-	@PostMapping("/uploadFile")
+	@PostMapping(value = "/api/uploadFile",produces = MediaType.APPLICATION_JSON_VALUE)
 	public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
 		String fileName = fileStorageService.storeFile(file);
 
