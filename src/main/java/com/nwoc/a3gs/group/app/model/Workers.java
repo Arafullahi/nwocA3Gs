@@ -35,6 +35,9 @@ public class Workers  {
 	private String email;
 	
 	private String location;
+	
+	private String images;
+	
 	@JsonIgnore
 	
 	
@@ -103,6 +106,14 @@ public class Workers  {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public String getImages() {
+		return images;
+	}
+
+	public void setImages(String images) {
+		this.images = images;
 	}
 
 	public List<Services> getServices() {

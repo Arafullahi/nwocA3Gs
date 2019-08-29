@@ -13,14 +13,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.nwoc.a3gs.group.app.dto.WorkersDTO;
 import com.nwoc.a3gs.group.app.model.Workers;
-import com.nwoc.a3gs.group.app.services.ServicesService;
 import com.nwoc.a3gs.group.app.services.WorkerService;
 
-@RestController
+@Controller
 @RequestMapping("/api")
 public class WorkerController {
 
@@ -28,11 +28,8 @@ public class WorkerController {
 	private WorkerService workerService;
 	private static final Logger LOGGER = LogManager.getLogger(WorkerController.class);
 	
-	@Autowired
-	private ServicesService servicesService;
-	
 	@PostMapping(value="/services/workers",produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> addWorkers(@RequestBody WorkersDTO workersDTO) {
+	public ResponseEntity<?> addWorkers(@ModelAttribute WorkersDTO workersDTO) {
 		try {
 			Workers workers = workerService.save(workersDTO);
 			return ResponseEntity.ok(workers);
