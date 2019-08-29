@@ -36,29 +36,29 @@ public class ServiceRequestService {
 		
 		ServiceRequests serviceRequests = new ServiceRequests();
 		BeanUtils.copyProperties(serviceRequestsDTO, serviceRequests);
-		Optional<User> userOpt= userRepository.findByUsername(serviceRequestsDTO.getCustomer().getUsername());
+		Optional<User> userOpt= userRepository.findByUsername(serviceRequestsDTO.getCustomerUserName());
 
 		if(!userOpt.isPresent()){
 			throw new NotFoundException("User not found");
 		}
-		Optional<Services> services = servicesRepository.findById(serviceRequestsDTO.getService().getId());
+		Optional<Services> services = servicesRepository.findById(serviceRequestsDTO.getServiceId());
 		if(!services.isPresent()){
 			throw new NotFoundException("User not found");
 		}
 
-		if(serviceRequestsDTO.getWorker()!=null && serviceRequestsDTO.getWorker().getWorkerId()!=null){
-			Long workerId=serviceRequestsDTO.getWorker().getWorkerId();
+		if(serviceRequestsDTO.getWorkerId()!=null && !serviceRequestsDTO.getWorkerId().equals(0)){
+			Long workerId=serviceRequestsDTO.getWorkerId();
 			Optional<Workers> worker= workerRepository.findById(workerId);
 			if(!worker.isPresent()){
 				throw new NotFoundException("Worker Not found");
 			}
-			Optional<WorkerRates> workerRates = workerRatesRepository.findByServices_IdAndWorkers_WorkerId(serviceRequestsDTO.getService().getId(),workerId);
+			Optional<WorkerRates> workerRates = workerRatesRepository.findByServices_IdAndWorkers_WorkerId(serviceRequestsDTO.getServiceId(),workerId);
 			if(workerRates.isPresent()){
 				serviceRequests.setRate(workerRates.get().getRate()*serviceRequests.getHours());
 			}
 			serviceRequests.setWorker(worker.get());
 		}else{
-			Optional<ServiceRates> serviceRates = serviceRatesRepository.findByServices_Id(serviceRequestsDTO.getService().getId());
+			Optional<ServiceRates> serviceRates = serviceRatesRepository.findByServices_Id(serviceRequestsDTO.getServiceId());
 			if(serviceRates.isPresent()){
 				serviceRequests.setRate(serviceRates.get().getRate()*serviceRequests.getHours());
 			}
@@ -95,14 +95,36 @@ public class ServiceRequestService {
 
 	public ServiceRequests update(ServiceRequestsDTO serviceRequestsDTO, Long id) throws NotFoundException {
 		Optional<ServiceRequests> serviceReqsOPt =findOne(id);
-		Optional<User> userOpt= userRepository.findByUsername(serviceRequestsDTO.getCustomer().getUsername());
+		Optional<User> userOpt= userRepository.findByUsername(serviceRequestsDTO.getCustomerUserName());
 		if(!userOpt.isPresent()){
 			throw new NotFoundException("User not found");
 		}
 		if(serviceReqsOPt.isPresent()){
+			Optional<Services> services = servicesRepository.findById(serviceRequestsDTO.getServiceId());
+			if(!services.isPresent()){
+				throw new NotFoundException("User not found");
+			}
 			ServiceRequests serviceRequests = serviceReqsOPt.get();
 			BeanUtils.copyProperties(serviceRequestsDTO, serviceRequests);	
 			serviceRequests.setCustomer(userOpt.get());
+			serviceRequests.setService(services.get());
+			if(serviceRequestsDTO.getWorkerId()!=null && !serviceRequestsDTO.getWorkerId().equals(0)){
+				Long workerId=serviceRequestsDTO.getWorkerId();
+				Optional<Workers> worker= workerRepository.findById(workerId);
+				if(!worker.isPresent()){
+					throw new NotFoundException("Worker Not found");
+				}
+				Optional<WorkerRates> workerRates = workerRatesRepository.findByServices_IdAndWorkers_WorkerId(serviceRequestsDTO.getServiceId(),workerId);
+				if(workerRates.isPresent()){
+					serviceRequests.setRate(workerRates.get().getRate()*serviceRequests.getHours());
+				}
+				serviceRequests.setWorker(worker.get());
+			}else{
+				Optional<ServiceRates> serviceRates = serviceRatesRepository.findByServices_Id(serviceRequestsDTO.getServiceId());
+				if(serviceRates.isPresent()){
+					serviceRequests.setRate(serviceRates.get().getRate()*serviceRequests.getHours());
+				}
+			}
 			return serviceRequestRepository.saveAndFlush(serviceRequests);
 		}else{
 			throw new NotFoundException("Service Request not found exception");

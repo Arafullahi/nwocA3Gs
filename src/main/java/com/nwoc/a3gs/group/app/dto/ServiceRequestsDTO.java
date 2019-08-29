@@ -19,11 +19,11 @@ public class ServiceRequestsDTO {
 
 	private Long id;
 	 @NotNull
-	private User customer;
+	private String customerUserName;
 	 @NotNull
-	private Services service;
+	private Long serviceId;
 	
-	private Workers worker;
+	private Long workerId;
 	 @NotNull
 	private Float hours;
 	private Double rate;
@@ -48,28 +48,28 @@ public class ServiceRequestsDTO {
 		this.id = id;
 	}
 
-	public User getCustomer() {
-		return customer;
+	public String getCustomerUserName() {
+		return customerUserName;
 	}
 
-	public void setCustomer(User customer) {
-		this.customer = customer;
+	public void setCustomerUserName(String customerUserName) {
+		this.customerUserName = customerUserName;
 	}
 
-	public Services getService() {
-		return service;
+	public Long getServiceId() {
+		return serviceId;
 	}
 
-	public void setService(Services service) {
-		this.service = service;
+	public void setServiceId(Long serviceId) {
+		this.serviceId = serviceId;
 	}
 
-	public Workers getWorker() {
-		return worker;
+	public Long getWorkerId() {
+		return workerId;
 	}
 
-	public void setWorker(Workers worker) {
-		this.worker = worker;
+	public void setWorkerId(Long workerId) {
+		this.workerId = workerId;
 	}
 
 	public Float getHours() {
