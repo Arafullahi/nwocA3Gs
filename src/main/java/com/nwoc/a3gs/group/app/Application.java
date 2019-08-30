@@ -11,12 +11,11 @@ import com.nwoc.a3gs.group.app.dto.FileStorageProperties;
 
 @SpringBootApplication
 @EnableJpaAuditing
+@EnableJsonFilter()
 @EnableConfigurationProperties({
     FileStorageProperties.class
 })
 
-
-@EnableJsonFilter()
 public class Application {
 
 	public static void main(String[] args) {
