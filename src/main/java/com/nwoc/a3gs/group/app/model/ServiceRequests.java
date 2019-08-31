@@ -63,7 +63,6 @@ public class ServiceRequests {
 	@LastModifiedDate
 	private Date updateddAt;
 	@Enumerated(EnumType.STRING)
-	@NaturalId
 	@Column(length = 60)
 	private ServiceStatus serviceStatus;
 	

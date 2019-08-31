@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,8 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,13 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nwoc.a3gs.group.app.dto.ServiceRatesDTO;
 import com.nwoc.a3gs.group.app.dto.ServiceRequestsDTO;
-import com.nwoc.a3gs.group.app.model.ServiceRates;
 import com.nwoc.a3gs.group.app.model.ServiceRequests;
 import com.nwoc.a3gs.group.app.model.ServiceStatus;
 import com.nwoc.a3gs.group.app.model.Workers;
-import com.nwoc.a3gs.group.app.repository.ServiceRequestRepository;
 import com.nwoc.a3gs.group.app.services.ServiceRequestService;
 import com.nwoc.a3gs.group.app.services.WorkerService;
 

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -41,8 +42,11 @@ public class Services {
 	@JsonBackReference
 	private Services parentSevice;
 	@NotBlank
+	@Column(length = 500)
 	private String name;
+	@Column(length = 500)
 	private String description;
+	@Column(length = 500)
 	private String images;
 
 	@Temporal(TemporalType.TIMESTAMP)
