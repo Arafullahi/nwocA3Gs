@@ -122,9 +122,9 @@ public class ServiceController {
 	}
 	
 	@GetMapping(value = "/search",produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getSearchService(@RequestParam("name") String name, @RequestParam("id") Long id) {
+	public ResponseEntity<?> getSearchService(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "id", required = false) Long id) {
 		
-		if((!name.equals("") && !name.isEmpty()) && (id != null) )
+		if((name != null) && (id != null) )
 		{
 		try {
 			List<Services> service = servicesService.findMainServicesAndName(name, id);
@@ -144,7 +144,7 @@ public class ServiceController {
 		}
 
 		}
-		else if((!name.equals("") && !name.isEmpty()) && (id == null))
+		else if((name != null) && (id == null))
 		{
 			try {
 			List<Services> service = servicesService.findMainServiceName(name);
@@ -164,7 +164,7 @@ public class ServiceController {
 			
 		}
 		
-		else if((name.equals("") && name.isEmpty()) && (id != null)) 
+		else if((name == null) && (id != null)) 
 		{
 			try {
 			List<Services> service = servicesService.findMainServiceById(id);
@@ -183,6 +183,6 @@ public class ServiceController {
 			
 		}
 }
-		return ResponseEntity.ok().body(null);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Please enter any valid input");
 }
 }

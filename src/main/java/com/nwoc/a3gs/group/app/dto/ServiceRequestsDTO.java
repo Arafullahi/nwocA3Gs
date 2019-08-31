@@ -36,7 +36,6 @@ public class ServiceRequestsDTO {
 	private String pickTime;
 	
 	@Enumerated(EnumType.STRING)
-	@NaturalId
 	@Column(length = 60)
 	private ServiceStatus serviceStatus;
 

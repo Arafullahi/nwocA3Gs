@@ -43,7 +43,7 @@ public class ServiceRequestService {
 		}
 		Optional<Services> services = servicesRepository.findById(serviceRequestsDTO.getServiceId());
 		if(!services.isPresent()){
-			throw new NotFoundException("User not found");
+			throw new NotFoundException("Service not found");
 		}
 
 		if(serviceRequestsDTO.getWorkerId()!=null && !serviceRequestsDTO.getWorkerId().equals(0)){
