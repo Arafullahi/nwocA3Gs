@@ -5,6 +5,7 @@ package com.nwoc.a3gs.group.app.controller;
 import java.util.List;
 import java.util.Optional;
 
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +14,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.nwoc.a3gs.group.app.dto.WorkersDTO;
 import com.nwoc.a3gs.group.app.model.Workers;
 import com.nwoc.a3gs.group.app.services.WorkerService;
 
-@Controller
+@RestController
 @RequestMapping("/api")
 public class WorkerController {
 
@@ -63,7 +63,7 @@ public class WorkerController {
 
 
 	@PutMapping(value="/services/workers/{worker_id}",produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> updateWorker(@PathVariable(value = "worker_id") Long worker_id, @RequestBody WorkersDTO workersDTO) {
+	public ResponseEntity<?> updateWorker(@PathVariable(value = "worker_id") Long worker_id, @ModelAttribute WorkersDTO workersDTO) {
 		try {
 		Workers workerUpdate = workerService.update(workersDTO, worker_id);
 		return ResponseEntity.ok().body(workerUpdate);
