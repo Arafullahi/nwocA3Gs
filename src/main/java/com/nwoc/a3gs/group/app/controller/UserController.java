@@ -1,8 +1,11 @@
 package com.nwoc.a3gs.group.app.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
@@ -23,13 +26,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jfilter.filter.FieldFilterSetting;
+import com.nwoc.a3gs.group.app.dto.PasswordResetTokenDTO;
 import com.nwoc.a3gs.group.app.dto.ResetPasswordDTO;
 import com.nwoc.a3gs.group.app.dto.UserDTO;
 import com.nwoc.a3gs.group.app.message.response.ResponseMessage;
+import com.nwoc.a3gs.group.app.model.PasswordResetToken;
 import com.nwoc.a3gs.group.app.model.User;
-import com.nwoc.a3gs.group.app.services.MailServiceImpl;
 import com.nwoc.a3gs.group.app.services.UserDetailsServiceImpl;
 
 import javassist.NotFoundException;
@@ -130,4 +135,83 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
 	}
+	
+	@PostMapping(value="/forgotpassword",produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> ForgotPassword(@Valid @RequestBody PasswordResetTokenDTO passwordResetTokenDTO){
+			try {
+				  User user = userService.findUserByEmail(passwordResetTokenDTO.getEmail());
+				   if (user == null) {
+						return ((BodyBuilder) ResponseEntity.notFound()).body("We didn't find an account for that e-mail address.");
+					}
+				   String token = UUID.randomUUID().toString();
+				  if(userService.createPasswordResetTokenForUser(user, token) != null) {
+					  if(userService.sendForgotMail(token, user)) {
+						  return ResponseEntity.ok("PassWord Reset Link Successfully Send Your Inbox Please Check.......");	
+					  }
+					  else
+					  {
+						  return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unexpexted Error happen when sending password reset mail link please generate onece more.....");
+					  }
+				  }
+				    
+				return new ResponseEntity<>(new ResponseMessage("Password Reset Link Successfully Sended!"), HttpStatus.OK);
+				}
+			catch (Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				System.out.println(e.getMessage());
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Unexpected Error during Reset password link");
+			}
+	}
+	
+	@GetMapping(value = "/resetpass/reset",produces=MediaType.APPLICATION_JSON_VALUE)
+	public String getForgotPassLink(@RequestParam(value = "token") String token, RedirectAttributes redirectAttributes, HttpServletResponse resp) throws IOException {
+		if(token != null) {
+			try {
+				
+				 PasswordResetToken passwordResetToken = userService.findUserByToken(token);
+				 if (passwordResetToken == null) {
+						//return ((BodyBuilder) ResponseEntity.notFound()).body("We didn't find an account for that token.");
+					  resp.sendError(HttpServletResponse.SC_NOT_FOUND, "We didn't find an account for that token. "); // explicitely put error message in request
+					return null;
+				 }
+				 else if(passwordResetToken.isExpired())
+				 {
+					 userService.deleteById(passwordResetToken.getId());
+					 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Token has expired, please request a new password reset."); // explicitely put error message in request
+						return null;
+				 }
+				 
+				 return "redirect:/resetpass/changepass?token=" + token + "&user=" + passwordResetToken.getUser().getUsername() + "&id=" + passwordResetToken.getId() ;
+				 
+			}
+			catch(Exception e) {
+				LOGGER.error(e.getMessage(), e);
+				System.out.println(e.getMessage());
+				//return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Unexpected Error during Reset password generating");		
+				resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unexpected Error during Reset password generating"); // explicitely put error message in request
+				return null;
+			}
+		}
+		return null;
+		
+	}
+	
+	@PatchMapping(value="/resetpass/changepass",produces=MediaType.APPLICATION_JSON_VALUE)
+	public String ResetPassword(@RequestParam(value = "token") String token, @RequestParam(value = "user") String user, @RequestParam(value = "id") Long id, @Valid @RequestBody ResetPasswordDTO resetPasswordDTO, RedirectAttributes redirectAttributes, HttpServletResponse resp) throws IOException{
+		try {
+			 userService.resetPass(user, resetPasswordDTO);
+			 userService.deleteById(id);
+			//return new ResponseEntity<>(new ResponseMessage("Password Reset Successfully Completed!"), HttpStatus.OK);
+			 //resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Password Reset Successfully Completed!"); // explicitely put error message in request
+			return "redirect:/api/auth/signin";
+			}
+		catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
+			resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Unexpected Error during Reset password generating"); // explicitely put error message in request
+			return null;
+		}
+		
+	}
+	
 }

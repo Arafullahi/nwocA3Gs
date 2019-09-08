@@ -25,12 +25,15 @@ import com.braintreegateway.BraintreeGateway;
 import com.braintreegateway.Customer;
 import com.braintreegateway.CustomerRequest;
 import com.braintreegateway.Result;
+import com.nwoc.a3gs.group.app.dto.PasswordResetTokenDTO;
 import com.nwoc.a3gs.group.app.dto.ResetPasswordDTO;
 import com.nwoc.a3gs.group.app.dto.UserDTO;
 import com.nwoc.a3gs.group.app.exceptions.UserNameUsedException;
+import com.nwoc.a3gs.group.app.model.PasswordResetToken;
 import com.nwoc.a3gs.group.app.model.Role;
 import com.nwoc.a3gs.group.app.model.RoleName;
 import com.nwoc.a3gs.group.app.model.User;
+import com.nwoc.a3gs.group.app.repository.PasswordResetTokenRepository;
 import com.nwoc.a3gs.group.app.repository.RoleRepository;
 import com.nwoc.a3gs.group.app.repository.UserRepository;
 
@@ -47,6 +50,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
     UserRepository userRepository;
+	
+	@Autowired
+	PasswordResetTokenRepository passwordResetTokenRepository;
 	
 	@Autowired
 	PasswordEncoder encoder;
@@ -194,6 +200,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	public void delete(User user) {
 		userRepository.delete(user);
 	}
+	
+	public User findUserByEmail(String email) {
+		return userRepository.findUserByEmail(email);
+	}
+	
+	public PasswordResetToken findUserByToken(String token) {
+		return passwordResetTokenRepository.findByToken(token);
+	}
+	
+	public PasswordResetToken createPasswordResetTokenForUser(User user, String token) {
+	    PasswordResetToken myToken = new PasswordResetToken(token, user);
+	    myToken.setExpiryDate(30);
+	    return passwordResetTokenRepository.save(myToken);
+	}
 
 	public Page<User> findUserByPages(int pageNumber, int size) {
 		Pageable pageable = new PageRequest(pageNumber, size);
@@ -219,4 +239,36 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		
 				return false;
 	}
+	
+	public boolean sendForgotMail(String token, User user)
+	{
+		boolean isSend = false;
+		 if(mailServiceImpl.sendForgotPasswordMail(token, user)) {
+			 isSend = true; 
+		 }
+		 
+		return isSend;
+		
+	}
+	  public User resetPass(String user, ResetPasswordDTO resetPasswordDTO) throws NotFoundException {
+			
+			Optional<User> userOpt= userRepository.findByUsername(user);
+			if(!userOpt.isPresent()){
+				throw new NotFoundException("User not found");
+			}
+			User usr = userOpt.get();
+			String pass = resetPasswordDTO.getNewPassword();
+			String confirm = resetPasswordDTO.getConfirnpass();
+				if(pass.equalsIgnoreCase(confirm)) {
+					usr.setPassword(encoder.encode(pass));
+					usr= userRepository.saveAndFlush(usr);
+					return usr;
+				}else{
+					throw new NotFoundException("Confirm Password is not match with new password");
+				}
+			}
+	  public void deleteById(Long id) {
+		  passwordResetTokenRepository.deleteById(id);
+		}
+		
 }
