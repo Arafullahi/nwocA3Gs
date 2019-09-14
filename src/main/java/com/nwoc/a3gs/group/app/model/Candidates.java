@@ -10,38 +10,67 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "candidates")
+@Table(name = "candidates", uniqueConstraints = { @UniqueConstraint(columnNames = { "email" })})
 @EntityListeners(AuditingEntityListener.class)
 public class Candidates {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long candidate_id;
+	
+	@NotBlank
+	@Size(min = 3, max = 50)
 	private String first_name;
+	
 	private String middle_name;
+	
 	private String last_name;
+	
+	@Size(max = 500)
 	private String address;
+	
+	@NotBlank
 	private String phone;
+	
+	@NotBlank
 	private Date dob;
+	
+	@NotNull
 	private Integer pin;
+	
+	@NotBlank
+	@Size(max = 50)
 	@Email
 	private String email;
+	
 	private String country;
+	
 	private String state;
+	
 	private String city;
+	
+	@NotBlank
 	private String qualification;
+	
+	@NotBlank
 	private String experience;
+	
 	private String intrested_work_area;
+	
+	@NotBlank
 	private String resume_file;
 	
 	@Temporal(TemporalType.TIMESTAMP)

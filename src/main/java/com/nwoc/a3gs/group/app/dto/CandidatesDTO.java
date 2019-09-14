@@ -1,26 +1,58 @@
 package com.nwoc.a3gs.group.app.dto;
 
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 
 public class CandidatesDTO {
 	
 	
 	private Long candidate_id;
+	
+	@NotBlank(message = "First Name can't be blank")
+	@Size(min = 3, max = 50)
 	private String first_name;
+	
 	private String middle_name;
+	
 	private String last_name;
+	
+	@Size(max = 500)
 	private String address;
+	
+	@NotBlank(message = "Phone No can't be blank")
 	private String phone;
+	
+	@NotBlank(message = "DOB can't be blank")
 	private String dob;
+	
+	@NotNull(message = "pin can't be blank")
 	private Integer pin;
+	
+	@NotBlank(message = "Email can't blank")
+	@Size(max = 50)
+	@Email
 	private String email;
+	
 	private String country;
+	
 	private String state;
+	
 	private String city;
+	
+	@NotBlank(message = "Qualification can't be blank")
 	private String qualification;
+	
+	@NotBlank(message = "Experience can't be blank")
 	private String experience;
+	
 	private String intrested_work_area;
+	
+	@NotBlank(message = "Please Upload resume")
 	private MultipartFile files;
 	private String resume_file;
 	

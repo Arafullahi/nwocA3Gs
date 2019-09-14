@@ -75,7 +75,7 @@ public class CandidatesController {
 	}
 }
 	
-	@PutMapping(value="/candidates/{candidate_id}",produces=MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value="/candidates/{candidate_id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateCandidate(@ModelAttribute @Valid CandidatesDTO candidatesDTO, @PathVariable(value = "candidate_id") Long candidate_id) {
 		try {
 		if(candidateService.update(candidatesDTO, candidate_id))
