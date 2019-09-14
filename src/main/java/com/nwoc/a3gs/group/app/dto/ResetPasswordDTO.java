@@ -5,6 +5,7 @@ public class ResetPasswordDTO {
 	private String userName;
 	private String oldpassWord;
 	private String newPassword;
+	private String confirnpass;
 	
 	public String getUserName() {
 		return userName;
@@ -24,7 +25,11 @@ public class ResetPasswordDTO {
 	public void setNewPassword(String newPassword) {
 		this.newPassword = newPassword;
 	}
-	
-	
+	public String getConfirnpass() {
+		return confirnpass;
+	}
+	public void setConfirnpass(String confirnpass) {
+		this.confirnpass = confirnpass;
+	}
 
 }

@@ -62,7 +62,7 @@ public class WorkerController {
 }
 
 
-	@PutMapping(value="/services/workers/{worker_id}",produces=MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value="/services/workers/{worker_id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateWorker(@PathVariable(value = "worker_id") Long worker_id, @ModelAttribute WorkersDTO workersDTO) {
 		try {
 		Workers workerUpdate = workerService.update(workersDTO, worker_id);
