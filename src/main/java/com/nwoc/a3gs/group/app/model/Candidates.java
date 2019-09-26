@@ -45,7 +45,7 @@ public class Candidates {
 	@NotBlank
 	private String phone;
 	
-	@NotBlank
+	@NotNull
 	private Date dob;
 	
 	@NotNull
@@ -70,7 +70,7 @@ public class Candidates {
 	
 	private String intrested_work_area;
 	
-	@NotBlank
+	@NotNull
 	private String resume_file;
 	
 	@Temporal(TemporalType.TIMESTAMP)

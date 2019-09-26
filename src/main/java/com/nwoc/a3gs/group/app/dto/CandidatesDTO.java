@@ -27,7 +27,7 @@ public class CandidatesDTO {
 	@NotBlank(message = "Phone No can't be blank")
 	private String phone;
 	
-	@NotBlank(message = "DOB can't be blank")
+	@NotNull(message = "DOB can't be blank")
 	private String dob;
 	
 	@NotNull(message = "pin can't be blank")
@@ -52,7 +52,7 @@ public class CandidatesDTO {
 	
 	private String intrested_work_area;
 	
-	@NotBlank(message = "Please Upload resume")
+	@NotNull(message = "Please Upload resume")
 	private MultipartFile files;
 	private String resume_file;
 	
